@@ -114,7 +114,8 @@ export class Test1PlatformAccessory {
   generateRandomTemperature(): number {
     const minTemperature = 10.0;
     const maxTemperature = 20.0;
-    return Math.random() * (maxTemperature - minTemperature) + minTemperature;
+    const randomTemperature = Math.random() * (maxTemperature - minTemperature) + minTemperature;
+    return Number(randomTemperature.toFixed(2)); // Arrondir à 2 décimales
   }
   
   /**
