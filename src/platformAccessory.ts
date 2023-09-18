@@ -74,8 +74,8 @@ export class Test1PlatformAccessory {
     this.temperatureService = this.accessory.getService('Temperature Sensor One Name') ||
       this.accessory.addService(this.platform.Service.TemperatureSensor, 'Temperature Sensor One Name', 'TestTemperature-1');
     // create handlers for required characteristics
-    this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
-      .onGet(this.handleCurrentTemperatureGet.bind(this));
+    /* this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
+      .onGet(this.handleCurrentTemperatureGet.bind(this)); */
     /**
      * Updating characteristics values asynchronously.
      *
