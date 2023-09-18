@@ -9,6 +9,7 @@ import { Test1HomebridgePlatform } from './platform';
  */
 export class Test1PlatformAccessory {
   private service: Service;
+  private temperatureService: Service;
 
   /**
    * These are just used to create a working example
@@ -69,6 +70,12 @@ export class Test1PlatformAccessory {
     const motionSensorTwoService = this.accessory.getService('Motion Sensor Two Name') ||
       this.accessory.addService(this.platform.Service.MotionSensor, 'Motion Sensor Two Name', 'YourUniqueIdentifier-2');
 
+    // Add 1 "temperature sensor" services to the accessory
+    this.temperatureService = this.accessory.getService('Temperature Sensor One Name') ||
+      this.accessory.addService(this.platform.Service.TemperatureSensor, 'Temperature Sensor One Name', 'TestTemperature-1');
+    // create handlers for required characteristics
+    this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
+      .onGet(this.handleCurrentTemperatureGet.bind(this));
     /**
      * Updating characteristics values asynchronously.
      *
@@ -90,6 +97,19 @@ export class Test1PlatformAccessory {
       this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
       this.platform.log.info('Triggering motionSensorTwoService:', !motionDetected);
     }, 10000);
+    
+  }
+
+  /**
+ * Handle requests to get the current value of the "Current Temperature" characteristic
+ */
+  handleCurrentTemperatureGet() {
+    this.platform.log.info('Triggered GET CurrentTemperature');
+
+    // set this to a valid value for CurrentTemperature
+    const currentValue = 12.4;
+
+    return currentValue;
   }
 
   /**
