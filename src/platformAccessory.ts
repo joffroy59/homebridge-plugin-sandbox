@@ -24,7 +24,7 @@ export class Test1PlatformAccessory {
     private readonly accessory: PlatformAccessory,
   ) {
 
-    this.platform.log.debug('Init  Test1PlatformAccessory');
+    this.platform.log.info('Init  Test1PlatformAccessory');
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Default-Manufacturer')
