@@ -104,7 +104,7 @@ export class Test1PlatformAccessory {
       newTemperature = this.generateRandomTemperature();
 
       // push the new value to HomeKit
-      motionSensorOneService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
+      this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
 
       this.platform.log.info('Triggering TemperatureService:', newTemperature);
     }, 10000);
