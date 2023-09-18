@@ -98,8 +98,23 @@ export class Test1PlatformAccessory {
       this.platform.log.info('Triggering motionSensorTwoService:', !motionDetected);
     }, 10000);
     
+    setInterval(() => {
+      // EXAMPLE - inverse the trigger
+      const newTemperature = this.generateRandomTemperature;
+
+      // push the new value to HomeKit
+      motionSensorOneService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
+
+      this.platform.log.info('Triggering TemperatureService:', newTemperature);
+    }, 10000);
+
   }
 
+  generateRandomTemperature(): number {
+  const minTemperature = 10.0;
+  const maxTemperature = 20.0;
+  return Math.random() * (maxTemperature - minTemperature) + minTemperature;
+}
   /**
  * Handle requests to get the current value of the "Current Temperature" characteristic
  */
