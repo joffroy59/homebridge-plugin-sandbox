@@ -99,7 +99,7 @@ export class Test1PlatformAccessory {
     }, 10000);
     
     setInterval(() => {
-      // EXAMPLE - inverse the trigger
+      // EXAMPLE - trigger Temperature random
       const newTemperature = this.generateRandomTemperature;
 
       // push the new value to HomeKit
