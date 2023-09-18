@@ -1,5 +1,11 @@
 #!/bin/sh 
 
-(cd ~/.homebridge/ && \
-npm install ~/dev/homebridge-plugin-test1 && \
+export PLUGIN_FOLDER=$(pwd)
+
+set -x 
+npm run build && \
+(\
+#cd ~/.homebridge/ && \
+#npm install $PLUGIN_FOLDER  && \
+sudo hb-service restart && \
 echo "DONE")
