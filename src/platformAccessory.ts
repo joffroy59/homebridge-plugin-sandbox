@@ -76,7 +76,11 @@ export class Test1PlatformAccessory {
     this.temperatureService = this.accessory.getService('Temperature Sensor One Name') ||
       this.accessory.addService(this.platform.Service.TemperatureSensor, 'Temperature Sensor One Name', 'TestTemperature-1');
 
+    const sn = this.accessory.getService(this.platform.Service.AccessoryInformation)
+      ?.getCharacteristic(this.platform.Characteristic.SerialNumber);
+    const filename = `fakegato-history_Test1-${sn}.json`;
     this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', accessory, {
+      filename,
       log: this.platform.log,
       disableTimer : true,
     });
