@@ -97,7 +97,7 @@ export class Test1PlatformAccessory {
       this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
       this.platform.log.info('Triggering motionSensorTwoService:', !motionDetected);
     }, 10000);
-    
+
     let newTemperature = 0.0;
     setInterval(() => {
       // EXAMPLE - trigger Temperature random
@@ -117,7 +117,7 @@ export class Test1PlatformAccessory {
     const randomTemperature = Math.random() * (maxTemperature - minTemperature) + minTemperature;
     return Number(randomTemperature.toFixed(2)); // Arrondir à 2 décimales
   }
-  
+
   /**
  * Handle requests to get the current value of the "Current Temperature" characteristic
  */
