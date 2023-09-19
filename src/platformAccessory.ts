@@ -78,6 +78,7 @@ export class Test1PlatformAccessory {
 
     this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', accessory, {
       log: this.platform.log,
+      disableTimer : true,
     });
     // create handlers for required characteristics
     /* this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
