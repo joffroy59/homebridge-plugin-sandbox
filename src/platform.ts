@@ -2,6 +2,7 @@ import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, 
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { Test1PlatformAccessory } from './platformAccessory';
+import fakegato from 'fakegato-history';
 
 /**
  * HomebridgePlatform
@@ -14,6 +15,7 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
 
   // this is used to track restored cached accessories
   public readonly accessories: PlatformAccessory[] = [];
+  private FakeGatoHistoryService;
 
   constructor(
     public readonly log: Logger,
@@ -21,6 +23,8 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
     public readonly api: API,
   ) {
     this.log.info('Finished initializing platform:', this.config.name);
+
+    this.FakeGatoHistoryService = fakegato(this.api);
 
     // When this event is fired it means Homebridge has restored all cached accessories from disk.
     // Dynamic Platform plugins should only register new accessories after this event was fired,
