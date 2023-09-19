@@ -113,6 +113,7 @@ export class Test1PlatformAccessory {
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
       this.platform.log.info('Triggering TemperatureService:', newTemperature);
 
+      this.platform.log.info('Update FakegatoService:', newTemperature);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         temp: newTemperature,
