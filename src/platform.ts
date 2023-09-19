@@ -15,7 +15,7 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
 
   // this is used to track restored cached accessories
   public readonly accessories: PlatformAccessory[] = [];
-  private FakeGatoHistoryService;
+  public FakeGatoHistoryService;
 
   constructor(
     public readonly log: Logger,

@@ -1,6 +1,7 @@
 import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
 
 import { Test1HomebridgePlatform } from './platform';
+import fakegato from 'fakegato-history';
 
 /**
  * Platform Accessory
@@ -10,6 +11,7 @@ import { Test1HomebridgePlatform } from './platform';
 export class Test1PlatformAccessory {
   private service: Service;
   private temperatureService: Service;
+  private fakegatoService: fakegato.FakeGatoHistoryService;
 
   /**
    * These are just used to create a working example
@@ -73,6 +75,10 @@ export class Test1PlatformAccessory {
     // Add 1 "temperature sensor" services to the accessory
     this.temperatureService = this.accessory.getService('Temperature Sensor One Name') ||
       this.accessory.addService(this.platform.Service.TemperatureSensor, 'Temperature Sensor One Name', 'TestTemperature-1');
+
+    this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', accessory, {
+      log: this.platform.log,
+    });
     // create handlers for required characteristics
     /* this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .onGet(this.handleCurrentTemperatureGet.bind(this)); */
@@ -105,8 +111,12 @@ export class Test1PlatformAccessory {
 
       // push the new value to HomeKit
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
-
       this.platform.log.info('Triggering TemperatureService:', newTemperature);
+
+      this.fakegatoService.addEntry({
+        time: new Date().getTime() / 1000,
+        temp: newTemperature,
+      });
     }, 10000);
 
   }
