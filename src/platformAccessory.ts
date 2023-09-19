@@ -81,8 +81,8 @@ export class Test1PlatformAccessory {
     const filename = `fakegato-history_Test1-${sn}.json`;
     this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', accessory, {
       filename,
+      storage: 'fs',
       log: this.platform.log,
-      disableTimer : false,
       minutes: 1,
     });
     // create handlers for required characteristics
