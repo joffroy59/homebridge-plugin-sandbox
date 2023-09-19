@@ -78,7 +78,7 @@ export class Test1PlatformAccessory {
 
     const sn = this.accessory.getService(this.platform.Service.AccessoryInformation)
       ?.getCharacteristic(this.platform.Characteristic.SerialNumber);
-    const filename = `fakegato-history_Test1-${sn}.json`;
+    const filename = `fakegato-history_Test1-${this.accessory.displayName}.json`;
     this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', accessory, {
       filename,
       storage: 'fs',
