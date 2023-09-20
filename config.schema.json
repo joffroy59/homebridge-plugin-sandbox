@@ -13,7 +13,7 @@
       },
       "devices": {
         "title": "Devices",
-        "type": "array",
+        "type": "TypedArray",
         "description": "The Devices",
         "items": {
           "title": "Device",
