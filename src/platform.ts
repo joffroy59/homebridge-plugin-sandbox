@@ -26,6 +26,7 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
 
     this.FakeGatoHistoryService = fakegato(this.api);
 
+
     // When this event is fired it means Homebridge has restored all cached accessories from disk.
     // Dynamic Platform plugins should only register new accessories after this event was fired,
     // in order to ensure they weren't added to homebridge already. This event can also be used
@@ -58,19 +59,21 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
     // EXAMPLE ONLY
     // A real plugin you would discover accessories from the local network, cloud services
     // or a user-defined array in the platform config.
-    const exampleDevices = [
-      {
-        exampleUniqueId: 'ABCD',
-        exampleDisplayName: 'Bedroom',
-      },
-      {
-        exampleUniqueId: 'EFGH',
-        exampleDisplayName: 'Kitchen',
-      },
-    ];
+    // const exampleDevices = [
+    //   {
+    //     exampleUniqueId: 'ABCD',
+    //     exampleDisplayName: 'Bedroom',
+    //   },
+    //   {
+    //     exampleUniqueId: 'EFGH',
+    //     exampleDisplayName: 'Kitchen',
+    //   },
+    // ];
+    const devices = this.config.discoveryOptions.devices;
 
     // loop over the discovered devices and register each one if it has not already been registered
-    for (const device of exampleDevices) {
+    //for (const device of exampleDevices) {
+    for (const device of devices) {
 
       // generate a unique id for the accessory this should be generated from
       // something globally unique, but constant, for example, the device serial
