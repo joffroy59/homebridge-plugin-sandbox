@@ -69,7 +69,7 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
     //     exampleDisplayName: 'Kitchen',
     //   },
     // ];
-    const devices = this.config.discoveryOptions.devices;
+    const devices = this.config.devices;
 
     // loop over the discovered devices and register each one if it has not already been registered
     //for (const device of exampleDevices) {
