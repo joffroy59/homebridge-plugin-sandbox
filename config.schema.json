@@ -11,27 +11,40 @@
         "required": true,
         "default": "Test1 Value"
       },
-      "devices": {
-        "title": "Devices",
-        "type": "TypedArray",
-        "description": "The Devices",
-        "items": {
-          "title": "Device",
-          "type": "object",
-          "properties": {
-            "name": {
-              "title": "Name",
-              "type": "string",
-              "required": true,
-              "examples": [
-                "Standing Device"
-              ]
-            },
-            "updateInterval": {
-              "title": "Interval in which the state of the Accessory should be updated (in seconds)",
-              "type": "number",
-              "default": "10",
-              "required": false
+      "options": {
+        "type": "object",
+        "properties": {
+          "devices": {
+            "title": "Devices",
+            "type": "array",
+            "description": "The Devices",
+            "items": {
+              "title": "Device",
+              "type": "object",
+              "properties": {
+                "configDeviceName": {
+                  "title": "Name",
+                  "type": "string",
+                  "required": true,
+                  "examples": [
+                    "Standing Device"
+                  ]
+                },
+                "uniqueId": {
+                  "title": "Name",
+                  "type": "string",
+                  "required": true,
+                  "examples": [
+                    "ABCD"
+                  ]
+                },
+                "updateInterval": {
+                  "title": "Interval in which the state of the Accessory should be updated (in seconds)",
+                  "type": "number",
+                  "default": "10",
+                  "required": false
+                }
+              }
             }
           }
         }
