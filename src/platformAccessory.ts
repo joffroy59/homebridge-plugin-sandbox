@@ -84,6 +84,7 @@ export class Test1PlatformAccessory {
     this.platform.log.info('filename filename=', filename);
     this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', accessory, {
       filename,
+      disableTimer: true,
       storage: 'fs',
       log: this.platform.log,
       minutes: 1,
