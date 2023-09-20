@@ -1,6 +1,6 @@
-import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
+import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, Service, Characteristic } from 'homebridge';
 
-import { PLATFORM_NAME, PLUGIN_NAME, Test1PlatformConfig, device, devicesConfig } from './settings';
+import { PLATFORM_NAME, PLUGIN_NAME, Test1PlatformConfig, devicesConfig } from './settings';
 import { Test1PlatformAccessory } from './platformAccessory';
 import fakegato from 'fakegato-history';
 
