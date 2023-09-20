@@ -27,14 +27,14 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
     this.log.info('Finished initializing platform:', this.config.name);
 
     // verify the config
-    try {
-      this.verifyConfig();
-      this.log.debug('Config OK');
-    } catch (e: any) {
-      this.log.error(`Verify Config, Error Message: ${e.message}, Submit Bugs Here: ` + 'https://tinyurl.com/SwitchBotBug');
-      this.log.debug(`Verify Config, Error: ${e}`);
-      return;
-    }
+    // try {
+    this.verifyConfig();
+    this.log.debug('Config OK');
+    // } catch (e: any) {
+    //   this.log.error(`Verify Config, Error Message: ${e.message}, Submit Bugs Here: ` + 'https://tinyurl.com/SwitchBotBug');
+    //   this.log.debug(`Verify Config, Error: ${e}`);
+    //   return;
+    // }
 
 
     this.FakeGatoHistoryService = fakegato(this.api);
@@ -97,7 +97,7 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
     const devices = this.config.options?.devices;
 
     if (!devices) {
-      this.log.debug(`SwitchBot API Currently Doesn't Have Any Devices With Cloud Services Enabled: ${JSON.stringify(devicesAPI.body)}`);
+      this.log.debug('No devices defined in config');
     } else {
       for (const device of devices) {
 
