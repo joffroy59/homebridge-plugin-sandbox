@@ -125,9 +125,9 @@ export class Test1PlatformAccessory {
 
       // push the new value to HomeKit
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
-      this.platform.log.info('Triggering TemperatureService:', newTemperature);
+      this.platform.log.info(`Triggering TemperatureService [${this.accessory.displayName}]:`, newTemperature);
 
-      this.platform.log.info('Update FakegatoService:', newTemperature);
+      this.platform.log.info(`Update FakegatoService [${this.accessory.displayName}]:`, newTemperature);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         temp: newTemperature,
@@ -137,8 +137,8 @@ export class Test1PlatformAccessory {
   }
 
   generateRandomTemperature(): number {
-    const minTemperature = 10.0;
-    const maxTemperature = 20.0;
+    const minTemperature = 20.0;
+    const maxTemperature = 22.0;
     const randomTemperature = Math.random() * (maxTemperature - minTemperature) + minTemperature;
     return Number(randomTemperature.toFixed(2)); // Arrondir à 2 décimales
   }
