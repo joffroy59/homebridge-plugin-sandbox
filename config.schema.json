@@ -23,7 +23,7 @@
               "type": "object",
               "properties": {
                 "configDeviceName": {
-                  "title": "Name",
+                  "title": "Device Name",
                   "type": "string",
                   "required": true,
                   "examples": [
@@ -31,7 +31,7 @@
                   ]
                 },
                 "uniqueId": {
-                  "title": "Name",
+                  "title": "uniqueId",
                   "type": "string",
                   "required": true,
                   "examples": [

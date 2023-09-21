@@ -22,6 +22,8 @@ export class Test1PlatformAccessory {
     Brightness: 100,
   };
 
+  private updateInterval: number;
+
   constructor(
     private readonly platform: Test1HomebridgePlatform,
     private readonly accessory: PlatformAccessory,
@@ -33,6 +35,8 @@ export class Test1PlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Default-Manufacturer')
       .setCharacteristic(this.platform.Characteristic.Model, 'Default-Model')
       .setCharacteristic(this.platform.Characteristic.SerialNumber, 'Default-Serial-' + accessory.displayName);
+
+    this.updateInterval = accessory.context.device.updateInterval;
 
     // get the LightBulb service if it exists, otherwise create a new LightBulb service
     // you can create multiple services for each accessory
@@ -112,7 +116,7 @@ export class Test1PlatformAccessory {
 
       this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
       this.platform.log.info('Triggering motionSensorTwoService:', !motionDetected);
-    }, 10000);
+    }, 1000 * this.updateInterval);
 
     let newTemperature = 0.0;
     setInterval(() => {
@@ -128,7 +132,7 @@ export class Test1PlatformAccessory {
         time: new Date().getTime() / 1000,
         temp: newTemperature,
       });
-    }, 10000);
+    }, 1000 * this.updateInterval);
 
   }
 
