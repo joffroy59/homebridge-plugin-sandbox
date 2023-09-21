@@ -6,7 +6,7 @@
     "type": "object",
     "properties": {
       "name": {
-        "title": "Property",
+        "title": "Patform Name",
         "type": "string",
         "required": true,
         "default": "Test1 Value"
