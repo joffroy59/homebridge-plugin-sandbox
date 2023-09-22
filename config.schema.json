@@ -54,7 +54,7 @@
                   "title": "Motion Sensor Identifier",
                   "type": "string",
                   "required": true,
-                  "default": "Sandbox YourUniqueIdentifier-1"
+                  "default": "Sandbox-Sensor-Motion-YourUniqueIdentifier-1"
                 },
                 "motionSensorName2": {
                   "title": "Motion Sensor Name",
@@ -66,7 +66,7 @@
                   "title": "Motion Sensor Identifier",
                   "type": "string",
                   "required": true,
-                  "default": "Sandbox YourUniqueIdentifier-2"
+                  "default": "Sandbox-Sensor-Motion-YourUniqueIdentifier-2"
                 },
                 "temperatureSensorName1": {
                   "title": "Temperature Sensor Name",
@@ -78,7 +78,7 @@
                   "title": "Temperature Sensor Identifier",
                   "type": "string",
                   "required": true,
-                  "default": "Sandbox YourUniqueIdentifier-1"
+                  "default": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
                 }
               }
             }
