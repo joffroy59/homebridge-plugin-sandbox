@@ -32,9 +32,9 @@ export class SandboxPlatformAccessory {
     this.platform.log.info('Init  SandboxPlatformAccessory');
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
-      .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Default-Manufacturer')
-      .setCharacteristic(this.platform.Characteristic.Model, 'Default-Model')
-      .setCharacteristic(this.platform.Characteristic.SerialNumber, 'Default-Serial-' + accessory.displayName);
+      .setCharacteristic(this.platform.Characteristic.Manufacturer, platform.config.manufacturer)
+      .setCharacteristic(this.platform.Characteristic.Model, platform.config.model)
+      .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
 
     this.updateInterval = accessory.context.device.updateInterval;
 
@@ -70,41 +70,50 @@ export class SandboxPlatformAccessory {
      */
 
     // Example: add two "motion sensor" services to the accessory
-    const motionSensorOneService = this.accessory.getService('Motion Sensor One Name') ||
-      this.accessory.addService(this.platform.Service.MotionSensor, 'Motion Sensor One Name', 'YourUniqueIdentifier-1');
+    let sensorName = accessory.context.device.motionSensorName1;
+    let sensorIdentifier = accessory.context.device.motionSensorIdentifier1;
+    const motionSensorOneService = this.createSensor(this.platform.Service.MotionSensor, sensorName, sensorIdentifier);
 
-    const motionSensorTwoService = this.accessory.getService('Motion Sensor Two Name') ||
-      this.accessory.addService(this.platform.Service.MotionSensor, 'Motion Sensor Two Name', 'YourUniqueIdentifier-2');
+    sensorName = accessory.context.device.motionSensorName2;
+    sensorIdentifier = accessory.context.device.motionSensorIdentifier2;
+    const motionSensorTwoService = this.createSensor(this.platform.Service.MotionSensor, sensorName, sensorIdentifier);
 
     // Add 1 "temperature sensor" services to the accessory
-    this.temperatureService = this.accessory.getService('Temperature Sensor One Name') ||
-      this.accessory.addService(this.platform.Service.TemperatureSensor, 'Temperature Sensor One Name', 'TestTemperature-1');
+    sensorName = accessory.context.device.temperatureSensorName1;
+    sensorIdentifier = accessory.context.device.temperatureSensorIdentifier1;
+    this.temperatureService = this.createSensor(this.platform.Service.TemperatureSensor, sensorName, sensorIdentifier);
 
-    const sn = this.accessory.getService(this.platform.Service.AccessoryInformation)
-      ?.getCharacteristic(this.platform.Characteristic.SerialNumber);
+    const sn = this.initAccessoryInformation();
     this.platform.log.info(`filename sn=${sn}`);
-    const filename = `fakegato-history_Sandbox-${this.accessory.displayName}.json`;
-    this.platform.log.info(`filename filename=${filename}`);
-    this.platform.log.info('filename filename=', filename);
-    this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', accessory, {
-      filename,
-      disableTimer: true,
-      storage: 'fs',
-      log: this.platform.log,
-      minutes: 1,
-    });
+
+    this.initFakeGatoHistory();
+
     // create handlers for required characteristics
     /* this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .onGet(this.handleCurrentTemperatureGet.bind(this)); */
-    /**
-     * Updating characteristics values asynchronously.
-     *
-     * Example showing how to update the state of a Characteristic asynchronously instead
-     * of using the `on('get')` handlers.
-     * Here we change update the motion sensor trigger states on and off every 10 seconds
-     * the `updateCharacteristic` method.
-     *
-     */
+    this.createHandlers(motionSensorOneService, motionSensorTwoService);
+  }
+
+  private createSensor(sensorTypoe, sensorName, sensorIdentifier) {
+    this.platform.log.info(`createSensor or reuse  sensorName=${sensorName}, sensorIdentifier=${sensorIdentifier}`);
+    return this.accessory.getService(sensorName) || this.accessory.addService(sensorTypoe, sensorName, sensorIdentifier);
+  }
+
+  private initAccessoryInformation() {
+    return this.accessory.getService(this.platform.Service.AccessoryInformation)
+      ?.getCharacteristic(this.platform.Characteristic.SerialNumber);
+  }
+
+  /**
+   * Updating characteristics values asynchronously.
+   *
+   * Example showing how to update the state of a Characteristic asynchronously instead
+   * of using the `on('get')` handlers.
+   * Here we change update the motion sensor trigger states on and off every 10 seconds
+   * the `updateCharacteristic` method.
+   *
+   */
+  private createHandlers(motionSensorOneService: Service, motionSensorTwoService: Service) {
     let motionDetected = false;
     setInterval(() => {
       // EXAMPLE - inverse the trigger
@@ -133,7 +142,19 @@ export class SandboxPlatformAccessory {
         temp: newTemperature,
       });
     }, 1000 * this.updateInterval);
+  }
 
+  private initFakeGatoHistory() {
+    const filename = `fakegato-history_Sandbox-${this.accessory.displayName}.json`;
+    this.platform.log.info(`filename filename=${filename}`);
+    this.platform.log.info('filename filename=', filename);
+    this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', this.accessory, {
+      filename,
+      disableTimer: true,
+      storage: 'fs',
+      log: this.platform.log,
+      minutes: 1,
+    });
   }
 
   generateRandomTemperature(): number {

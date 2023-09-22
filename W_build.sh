@@ -30,7 +30,7 @@ if [ "$INSTALL_ON" = true ];then
 fi
 
 set -x 
-npm run build && \
-( [ "$INSTALL_ON" = false ] || (cd ~/.homebridge/ && npm install $PLUGIN_FOLDER))  && \
-sudo hb-service restart && \
+echo "npm run build" && \
+( [ "$INSTALL_ON" = false ] || (cd ~/.homebridge/ && echo "npm install $PLUGIN_FOLDER"))  && \
+echo "sudo hb-service restart" && \
 echo "DONE"
