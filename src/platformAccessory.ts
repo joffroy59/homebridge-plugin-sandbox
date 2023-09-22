@@ -72,18 +72,16 @@ export class SandboxPlatformAccessory {
     // Example: add two "motion sensor" services to the accessory
     let sensorName = accessory.context.device.motionSensorName1;
     let sensorIdentifier = accessory.context.device.motionSensorIdentifier1;
-    let sensorTypoe = this.platform.Service.MotionSensor;
-    const motionSensorOneService = this.createSensor(sensorTypoe, sensorName, sensorIdentifier);
+    const motionSensorOneService = this.createSensor(this.platform.Service.MotionSensor, sensorName, sensorIdentifier);
 
     sensorName = accessory.context.device.motionSensorName2;
     sensorIdentifier = accessory.context.device.motionSensorIdentifier2;
-    const motionSensorTwoService = this.createSensor(sensorTypoe, sensorName, sensorIdentifier);
+    const motionSensorTwoService = this.createSensor(this.platform.Service.MotionSensor, sensorName, sensorIdentifier);
 
     // Add 1 "temperature sensor" services to the accessory
     sensorName = accessory.context.device.temperatureSensorName1;
     sensorIdentifier = accessory.context.device.temperatureSensorIdentifier1;
-    sensorTypoe = this.platform.Service.TemperatureSensor;
-    this.temperatureService = this.createSensor(sensorTypoe, sensorName, sensorIdentifier);
+    this.temperatureService = this.createSensor(this.platform.Service.TemperatureSensor, sensorName, sensorIdentifier);
 
     const sn = this.initAccessoryInformation();
     this.platform.log.info(`filename sn=${sn}`);
@@ -97,6 +95,7 @@ export class SandboxPlatformAccessory {
   }
 
   private createSensor(sensorTypoe, sensorName, sensorIdentifier) {
+    this.platform.log.info(`createSensor or reuse  sensorName=${sensorName}, sensorIdentifier=${sensorIdentifier}`);
     return this.accessory.getService(sensorName) || this.accessory.addService(sensorTypoe, sensorName, sensorIdentifier);
   }
 
