@@ -1,15 +1,17 @@
 import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
 
-import { Test1HomebridgePlatform } from './platform';
+import { SandboxHomebridgePlatform } from './platform';
+import fakegato from 'fakegato-history';
 
 /**
  * Platform Accessory
  * An instance of this class is created for each accessory your platform registers
  * Each accessory may expose multiple services of different service types.
  */
-export class Test1PlatformAccessory {
+export class SandboxPlatformAccessory {
   private service: Service;
   private temperatureService: Service;
+  private fakegatoService: fakegato.FakeGatoHistoryService;
 
   /**
    * These are just used to create a working example
@@ -20,17 +22,21 @@ export class Test1PlatformAccessory {
     Brightness: 100,
   };
 
+  private updateInterval: number;
+
   constructor(
-    private readonly platform: Test1HomebridgePlatform,
+    private readonly platform: SandboxHomebridgePlatform,
     private readonly accessory: PlatformAccessory,
   ) {
 
-    this.platform.log.info('Init  Test1PlatformAccessory');
+    this.platform.log.info('Init  SandboxPlatformAccessory');
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Default-Manufacturer')
       .setCharacteristic(this.platform.Characteristic.Model, 'Default-Model')
-      .setCharacteristic(this.platform.Characteristic.SerialNumber, 'Default-Serial');
+      .setCharacteristic(this.platform.Characteristic.SerialNumber, 'Default-Serial-' + accessory.displayName);
+
+    this.updateInterval = accessory.context.device.updateInterval;
 
     // get the LightBulb service if it exists, otherwise create a new LightBulb service
     // you can create multiple services for each accessory
@@ -38,7 +44,7 @@ export class Test1PlatformAccessory {
 
     // set the service name, this is what is displayed as the default name on the Home app
     // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
-    this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.exampleDisplayName);
+    this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.configDeviceName);
 
     // each service must implement at-minimum the "required characteristics" for the given service type
     // see https://developers.homebridge.io/#/service/Lightbulb
@@ -73,6 +79,20 @@ export class Test1PlatformAccessory {
     // Add 1 "temperature sensor" services to the accessory
     this.temperatureService = this.accessory.getService('Temperature Sensor One Name') ||
       this.accessory.addService(this.platform.Service.TemperatureSensor, 'Temperature Sensor One Name', 'TestTemperature-1');
+
+    const sn = this.accessory.getService(this.platform.Service.AccessoryInformation)
+      ?.getCharacteristic(this.platform.Characteristic.SerialNumber);
+    this.platform.log.info(`filename sn=${sn}`);
+    const filename = `fakegato-history_Sandbox-${this.accessory.displayName}.json`;
+    this.platform.log.info(`filename filename=${filename}`);
+    this.platform.log.info('filename filename=', filename);
+    this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', accessory, {
+      filename,
+      disableTimer: true,
+      storage: 'fs',
+      log: this.platform.log,
+      minutes: 1,
+    });
     // create handlers for required characteristics
     /* this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .onGet(this.handleCurrentTemperatureGet.bind(this)); */
@@ -96,7 +116,7 @@ export class Test1PlatformAccessory {
 
       this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
       this.platform.log.info('Triggering motionSensorTwoService:', !motionDetected);
-    }, 10000);
+    }, 1000 * this.updateInterval);
 
     let newTemperature = 0.0;
     setInterval(() => {
@@ -105,15 +125,20 @@ export class Test1PlatformAccessory {
 
       // push the new value to HomeKit
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
+      this.platform.log.info(`Triggering TemperatureService [${this.accessory.displayName}]:`, newTemperature);
 
-      this.platform.log.info('Triggering TemperatureService:', newTemperature);
-    }, 10000);
+      this.platform.log.info(`Update FakegatoService [${this.accessory.displayName}]:`, newTemperature);
+      this.fakegatoService.addEntry({
+        time: new Date().getTime() / 1000,
+        temp: newTemperature,
+      });
+    }, 1000 * this.updateInterval);
 
   }
 
   generateRandomTemperature(): number {
-    const minTemperature = 10.0;
-    const maxTemperature = 20.0;
+    const minTemperature = 20.0;
+    const maxTemperature = 22.0;
     const randomTemperature = Math.random() * (maxTemperature - minTemperature) + minTemperature;
     return Number(randomTemperature.toFixed(2)); // Arrondir à 2 décimales
   }

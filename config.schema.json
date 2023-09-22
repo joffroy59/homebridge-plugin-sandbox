@@ -1,15 +1,53 @@
 {
-  "pluginAlias": "Test1HomebridgePlugin",
+  "pluginAlias": "SandboxHomebridgePlugin",
   "pluginType": "platform",
   "singular": true,
   "schema": {
     "type": "object",
     "properties": {
       "name": {
-        "title": "Property",
+        "title": "Patform Name",
         "type": "string",
         "required": true,
-        "default": "Test1 Value"
+        "default": "Sandbox Value"
+      },
+      "options": {
+        "type": "object",
+        "properties": {
+          "devices": {
+            "title": "Devices",
+            "type": "array",
+            "description": "The Devices",
+            "items": {
+              "title": "Device",
+              "type": "object",
+              "properties": {
+                "configDeviceName": {
+                  "title": "Device Name",
+                  "type": "string",
+                  "required": true,
+                  "examples": [
+                    "Standing Device"
+                  ]
+                },
+                "uniqueId": {
+                  "title": "uniqueId",
+                  "type": "string",
+                  "required": true,
+                  "examples": [
+                    "ABCD"
+                  ]
+                },
+                "updateInterval": {
+                  "title": "Interval in which the state of the Accessory should be updated (in seconds)",
+                  "type": "number",
+                  "default": "10",
+                  "required": false
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
