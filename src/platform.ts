@@ -23,19 +23,10 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
     public readonly api: API,
   ) {
 
-
     this.log.info('Finished initializing platform:', this.config.name);
 
-    // verify the config
-    // try {
     this.verifyConfig();
     this.log.debug('Config OK');
-    // } catch (e: any) {
-    //   this.log.error(`Verify Config, Error Message: ${e.message}, Submit Bugs Here: ` + 'https://tinyurl.com/SwitchBotBug');
-    //   this.log.debug(`Verify Config, Error: ${e}`);
-    //   return;
-    // }
-
 
     this.FakeGatoHistoryService = fakegato(this.api);
 
@@ -81,19 +72,6 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
    */
   discoverDevices() {
 
-    // EXAMPLE ONLY
-    // A real plugin you would discover accessories from the local network, cloud services
-    // or a user-defined array in the platform config.
-    // const exampleDevices = [
-    //   {
-    //     exampleUniqueId: 'ABCD',
-    //     exampleDisplayName: 'Bedroom',
-    //   },
-    //   {
-    //     exampleUniqueId: 'EFGH',
-    //     exampleDisplayName: 'Kitchen',
-    //   },
-    // ];
     const devices = this.config.options?.devices;
 
     if (!devices) {
@@ -114,18 +92,9 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
           // the accessory already exists
           this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
 
-          // if you need to update the accessory.context then you should run `api.updatePlatformAccessories`. eg.:
-          // existingAccessory.context.device = device;
-          // this.api.updatePlatformAccessories([existingAccessory]);
-
           // create the accessory handler for the restored accessory
           // this is imported from `platformAccessory.ts`
           new Test1PlatformAccessory(this, existingAccessory);
-
-          // it is possible to remove platform accessories at any time using `api.unregisterPlatformAccessories`, eg.:
-          // remove platform accessories when no longer present
-          // this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
-          // this.log.info('Removing existing accessory from cache:', existingAccessory.displayName);
         } else {
           // the accessory does not yet exist, so we need to create it
           this.log.info('Adding new accessory:', device.configDeviceName);
@@ -146,6 +115,5 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
         }
       }
     }
-
   }
 }
