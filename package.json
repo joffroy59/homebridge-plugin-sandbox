@@ -26,7 +26,11 @@
   "keywords": [
     "homebridge-plugin"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "fakegato-history": "^0.6.4",
+    "lodash.defaults": "^4.2.0",
+    "uuid": "8.3.2"
+  },
   "devDependencies": {
     "@types/node": "^18.16.20",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
