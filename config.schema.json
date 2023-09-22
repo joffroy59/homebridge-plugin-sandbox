@@ -43,6 +43,42 @@
                   "type": "number",
                   "default": "10",
                   "required": false
+                },
+                "motionSensorName1": {
+                  "title": "Motion Sensor Name",
+                  "type": "string",
+                  "required": true,
+                  "default": "Sandbox Motion Sensor One Name"
+                },
+                "motionSensorIdentifier1": {
+                  "title": "Motion Sensor Identifier",
+                  "type": "string",
+                  "required": true,
+                  "default": "Sandbox YourUniqueIdentifier-1"
+                },
+                "motionSensorName2": {
+                  "title": "Motion Sensor Name",
+                  "type": "string",
+                  "required": true,
+                  "default": "Sandbox Motion Sensor Two Name"
+                },
+                "motionSensorIdentifier2": {
+                  "title": "Motion Sensor Identifier",
+                  "type": "string",
+                  "required": true,
+                  "default": "Sandbox YourUniqueIdentifier-2"
+                },
+                "temperatureSensorName1": {
+                  "title": "Temperature Sensor Name",
+                  "type": "string",
+                  "required": true,
+                  "default": "Sandbox Temperature Sensor One Name"
+                },
+                "temperatureSensorIdentifier1": {
+                  "title": "Temperature Sensor Identifier",
+                  "type": "string",
+                  "required": true,
+                  "default": "Sandbox YourUniqueIdentifier-1"
                 }
               }
             }
