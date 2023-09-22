@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "Test1HomebridgePlugin",
+  "pluginAlias": "SandboxHomebridgePlugin",
   "pluginType": "platform",
   "singular": true,
   "schema": {
@@ -9,7 +9,7 @@
         "title": "Patform Name",
         "type": "string",
         "required": true,
-        "default": "Test1 Value"
+        "default": "Sandbox Value"
       },
       "options": {
         "type": "object",

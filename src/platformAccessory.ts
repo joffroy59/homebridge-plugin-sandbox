@@ -1,6 +1,6 @@
 import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
 
-import { Test1HomebridgePlatform } from './platform';
+import { SandboxHomebridgePlatform } from './platform';
 import fakegato from 'fakegato-history';
 
 /**
@@ -8,7 +8,7 @@ import fakegato from 'fakegato-history';
  * An instance of this class is created for each accessory your platform registers
  * Each accessory may expose multiple services of different service types.
  */
-export class Test1PlatformAccessory {
+export class SandboxPlatformAccessory {
   private service: Service;
   private temperatureService: Service;
   private fakegatoService: fakegato.FakeGatoHistoryService;
@@ -25,11 +25,11 @@ export class Test1PlatformAccessory {
   private updateInterval: number;
 
   constructor(
-    private readonly platform: Test1HomebridgePlatform,
+    private readonly platform: SandboxHomebridgePlatform,
     private readonly accessory: PlatformAccessory,
   ) {
 
-    this.platform.log.info('Init  Test1PlatformAccessory');
+    this.platform.log.info('Init  SandboxPlatformAccessory');
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Default-Manufacturer')
@@ -83,7 +83,7 @@ export class Test1PlatformAccessory {
     const sn = this.accessory.getService(this.platform.Service.AccessoryInformation)
       ?.getCharacteristic(this.platform.Characteristic.SerialNumber);
     this.platform.log.info(`filename sn=${sn}`);
-    const filename = `fakegato-history_Test1-${this.accessory.displayName}.json`;
+    const filename = `fakegato-history_Sandbox-${this.accessory.displayName}.json`;
     this.platform.log.info(`filename filename=${filename}`);
     this.platform.log.info('filename filename=', filename);
     this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', accessory, {

@@ -1,7 +1,7 @@
 import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, Service, Characteristic } from 'homebridge';
 
-import { PLATFORM_NAME, PLUGIN_NAME, Test1PlatformConfig } from './settings';
-import { Test1PlatformAccessory } from './platformAccessory';
+import { PLATFORM_NAME, PLUGIN_NAME, SandboxPlatformConfig } from './settings';
+import { SandboxPlatformAccessory } from './platformAccessory';
 import fakegato from 'fakegato-history';
 
 /**
@@ -9,7 +9,7 @@ import fakegato from 'fakegato-history';
  * This class is the main constructor for your plugin, this is where you should
  * parse the user config and discover/register accessories with Homebridge.
  */
-export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
+export class SandboxHomebridgePlatform implements DynamicPlatformPlugin {
   public readonly Service: typeof Service = this.api.hap.Service;
   public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
 
@@ -19,7 +19,7 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
 
   constructor(
     public readonly log: Logger,
-    public readonly config: Test1PlatformConfig,
+    public readonly config: SandboxPlatformConfig,
     public readonly api: API,
   ) {
 
@@ -94,7 +94,7 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
 
           // create the accessory handler for the restored accessory
           // this is imported from `platformAccessory.ts`
-          new Test1PlatformAccessory(this, existingAccessory);
+          new SandboxPlatformAccessory(this, existingAccessory);
         } else {
           // the accessory does not yet exist, so we need to create it
           this.log.info('Adding new accessory:', device.configDeviceName);
@@ -108,7 +108,7 @@ export class Test1HomebridgePlatform implements DynamicPlatformPlugin {
 
           // create the accessory handler for the newly create accessory
           // this is imported from `platformAccessory.ts`
-          new Test1PlatformAccessory(this, accessory);
+          new SandboxPlatformAccessory(this, accessory);
 
           // link the accessory to your platform
           this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
