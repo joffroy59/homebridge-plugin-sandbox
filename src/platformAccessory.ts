@@ -149,7 +149,7 @@ export class SandboxPlatformAccessory {
     const filename = `fakegato-history_Sandbox-${this.accessory.displayName}.json`;
     this.platform.log.info(`filename filename=${filename}`);
     this.platform.log.info('filename filename=', filename);
-    this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', accessory, {
+    this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', this.accessory, {
       filename,
       disableTimer: true,
       storage: 'fs',
