@@ -17,6 +17,9 @@ export interface SandboxPlatformConfig extends PlatformConfig {
 
 export type options = {
     devices?: Array<devicesConfig>;
+    serialNumber?: string;
+    manufacturer?: string;
+    model?: string;
 };
 
 export interface devicesConfig extends device {

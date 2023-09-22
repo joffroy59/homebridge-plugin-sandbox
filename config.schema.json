@@ -46,6 +46,24 @@
                 }
               }
             }
+          },
+          "serialNumber": {
+            "title": "Serial Number",
+            "type": "string",
+            "required": true,
+            "default": "Default-Serial"
+          },
+          "manufacturer": {
+            "title": "Manufacturer",
+            "type": "string",
+            "required": true,
+            "default": "Default-Manufacturer"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string",
+            "required": true,
+            "default": "Default-Model"
           }
         }
       }

@@ -32,9 +32,9 @@ export class SandboxPlatformAccessory {
     this.platform.log.info('Init  SandboxPlatformAccessory');
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
-      .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Default-Manufacturer')
-      .setCharacteristic(this.platform.Characteristic.Model, 'Default-Model')
-      .setCharacteristic(this.platform.Characteristic.SerialNumber, 'Default-Serial-' + accessory.displayName);
+      .setCharacteristic(this.platform.Characteristic.Manufacturer, platform.config.manufacturer)
+      .setCharacteristic(this.platform.Characteristic.Model, platform.config.model)
+      .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
 
     this.updateInterval = accessory.context.device.updateInterval;
 
