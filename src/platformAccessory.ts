@@ -124,6 +124,11 @@ export class SandboxPlatformAccessory {
       motionSensorTwoService.updateCharacteristic(this.platform.Characteristic.MotionDetected, !motionDetected);
 
       this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
+      this.fakegatoService.addEntry({
+        time: new Date().getTime() / 1000,
+        motion: motionDetected?1:0,
+      });
+
       this.platform.log.info('Triggering motionSensorTwoService:', !motionDetected);
     }, 1000 * this.updateInterval);
 
