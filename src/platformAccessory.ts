@@ -142,7 +142,7 @@ export class SandboxPlatformAccessory {
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
       this.platform.log.info(`Triggering TemperatureService [${this.accessory.displayName}]:`, newTemperature);
 
-      this.platform.log.info(`Update FakegatoService [${this.accessory.displayName}]:`, newTemperature);
+      this.platform.log.info(`Update FakegatoService ${this.traceService(this.temperatureService)}:`, newTemperature);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         temp: newTemperature,
