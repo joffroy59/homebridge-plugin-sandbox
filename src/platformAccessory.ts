@@ -124,8 +124,7 @@ export class SandboxPlatformAccessory {
       motionSensorTwoService.updateCharacteristic(this.platform.Characteristic.MotionDetected, !motionDetected);
 
       this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
-      this.platform.log.info(`Update FakegatoService [${this.accessory.displayName}]`
-        + `(${motionSensorOneService.displayName}|${motionSensorOneService.UUID}):`, motionDetected);
+      this.platform.log.info(`Update FakegatoService ${this.traceService(motionSensorOneService)}:`, motionDetected);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         motion: motionDetected ? 1 : 0,
@@ -162,6 +161,11 @@ export class SandboxPlatformAccessory {
       log: this.platform.log,
       minutes: 1,
     });
+  }
+
+  private traceService(service) {
+    return `[${this.accessory.displayName}]`
+      + `(${service.displayName}|${service.UUID})`;
   }
 
   generateRandomTemperature(): number {
