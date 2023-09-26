@@ -131,9 +131,9 @@ export class SandboxPlatformAccessory {
       // push the new value to HomeKit
       motionSensorOneService.updateCharacteristic(this.platform.Characteristic.MotionDetected, motionDetected);
 
-      this.logInfo(`[${this.plateformeName}] Triggering motionSensorOneService: ${motionDetected}`);
-      this.logInfo(`[${this.plateformeName}] Update FakegatoService ${this.traceService(motionSensorOneService)}: ${motionDetected}`);
-      this.logInfo(`[${this.plateformeName}] MotionSensor Update rate = ${ (1000 * this.motionSensorUpdateInterval )/1000}`);
+      this.logInfo(`Triggering motionSensorOneService: ${motionDetected}`);
+      this.logInfo(`Update FakegatoService ${this.traceService(motionSensorOneService)}: ${motionDetected}`);
+      this.logInfo(`MotionSensor Update rate = ${ (1000 * this.motionSensorUpdateInterval )/1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         motion: motionDetected ? 1 : 0,
@@ -148,11 +148,11 @@ export class SandboxPlatformAccessory {
 
       // push the new value to HomeKit
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
-      this.logInfo(`[${this.plateformeName}] Triggering TemperatureService [${this.accessory.displayName}]: ${newTemperature
+      this.logInfo(`Triggering TemperatureService [${this.accessory.displayName}]: ${newTemperature
       }`);
-      this.logInfo(`[${this.plateformeName}] Update FakegatoService ${this.traceService(this.temperatureService)}: `
+      this.logInfo(`Update FakegatoService ${this.traceService(this.temperatureService)}: `
         + `${newTemperature}`);
-      this.logInfo(`[${this.plateformeName}] TemperatureSensor Update rate = ${(1000 * this.temperatureSensorUpdateInterval)
+      this.logInfo(`TemperatureSensor Update rate = ${(1000 * this.temperatureSensorUpdateInterval)
         / 1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
@@ -246,7 +246,7 @@ export class SandboxPlatformAccessory {
   }
 
   private logInfo(msg: string) {
-    this.log.info(msg);
+    this.log.info(`[${this.plateformeName}]  ${msg}`);
   }
 
   private logDebug(msg: string) {
