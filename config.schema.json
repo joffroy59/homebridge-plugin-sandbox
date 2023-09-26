@@ -44,6 +44,18 @@
                   "default": "10",
                   "required": false
                 },
+                "motionSensorUpdateInterval": {
+                  "title": "Interval in which the state of the Motion Service should be updated (in seconds)",
+                  "type": "number",
+                  "default": "5",
+                  "required": false
+                },
+                "temperatureSensorUpdateInterval": {
+                  "title": "Interval in which the state of the Temperature Service should be updated (in seconds)",
+                  "type": "number",
+                  "default": "7",
+                  "required": false
+                },
                 "motionSensorName1": {
                   "title": "Motion Sensor Name",
                   "type": "string",

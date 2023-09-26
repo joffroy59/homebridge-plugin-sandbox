@@ -23,6 +23,8 @@ export class SandboxPlatformAccessory {
   };
 
   private updateInterval: number;
+  private motionSensorUpdateInterval: number;
+  private temperatureSensorUpdateInterval: number;
 
   constructor(
     private readonly platform: SandboxHomebridgePlatform,
@@ -37,6 +39,9 @@ export class SandboxPlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
 
     this.updateInterval = accessory.context.device.updateInterval;
+
+    this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
+    this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensorUpdateInterval;
 
     // get the LightBulb service if it exists, otherwise create a new LightBulb service
     // you can create multiple services for each accessory
@@ -124,7 +129,8 @@ export class SandboxPlatformAccessory {
         time: new Date().getTime() / 1000,
         motion: motionDetected ? 1 : 0,
       });
-    }, 1000 * this.updateInterval);
+    }, 1000 * this.motionSensorUpdateInterval);
+    //TODO use default this.updateInterval if not set
 
     let newTemperature = 0.0;
     setInterval(() => {
@@ -139,7 +145,8 @@ export class SandboxPlatformAccessory {
         time: new Date().getTime() / 1000,
         temp: newTemperature,
       });
-    }, 1000 * this.updateInterval);
+    }, 1000 * this.temperatureSensorUpdateInterval);
+    //TODO use default this.updateInterval if not set
   }
 
   private initFakeGatoHistory() {

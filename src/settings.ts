@@ -26,6 +26,8 @@ export interface devicesConfig extends device {
     configDeviceName?: string;
     uniqueId?: string;
     updateInterval?: number | 5;
+    motionSensorUpdateInterval?: number | 5;
+    temperatureSensorUpdateInterval?: number | 5;
     motionSensorName1?: string;
     motionSensorIdentifier1?: string;
     temperatureSensorName1?: string;
