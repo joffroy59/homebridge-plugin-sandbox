@@ -25,6 +25,7 @@ export class SandboxPlatformAccessory {
   private updateInterval: number;
   private motionSensorUpdateInterval: number;
   private temperatureSensorUpdateInterval: number;
+  private plateformeName: string;
 
   constructor(
     private readonly platform: SandboxHomebridgePlatform,
@@ -39,7 +40,7 @@ export class SandboxPlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
 
     this.updateInterval = accessory.context.device.updateInterval;
-
+    this.plateformeName = this.platform.config.name || 'Default';
     // this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
     // this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensorUpdateInterval;
     this.motionSensorUpdateInterval = 10;
@@ -128,9 +129,10 @@ export class SandboxPlatformAccessory {
       // push the new value to HomeKit
       motionSensorOneService.updateCharacteristic(this.platform.Characteristic.MotionDetected, motionDetected);
 
-      this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
-      this.platform.log.info(`Update FakegatoService ${this.traceService(motionSensorOneService)}:`, motionDetected);
-      this.platform.log.info(`MotionSensor Update rate = ${ (1000 * this.motionSensorUpdateInterval )/1000}`);
+      this.platform.log.info(`[${this.plateformeName}] Triggering motionSensorOneService: ${motionDetected}`);
+      this.platform.log.info(`[${this.plateformeName}] Update FakegatoService ${this.traceService(motionSensorOneService)}:`
+        , motionDetected);
+      this.platform.log.info(`[${this.plateformeName}] MotionSensor Update rate = ${ (1000 * this.motionSensorUpdateInterval )/1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         motion: motionDetected ? 1 : 0,
@@ -145,9 +147,11 @@ export class SandboxPlatformAccessory {
 
       // push the new value to HomeKit
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
-      this.platform.log.info(`Triggering TemperatureService [${this.accessory.displayName}]:`, newTemperature);
-      this.platform.log.info(`Update FakegatoService ${this.traceService(this.temperatureService)}:`, newTemperature);
-      this.platform.log.info(`TemperatureSensor Update rate = ${(1000 * this.temperatureSensorUpdateInterval) / 1000}`);
+      this.platform.log.info(`[${this.plateformeName}] Triggering TemperatureService [${this.accessory.displayName}]:`, newTemperature);
+      this.platform.log.info(`[${this.plateformeName}] Update FakegatoService ${this.traceService(this.temperatureService)}:`
+        , newTemperature);
+      this.platform.log.info(`[${this.plateformeName}] TemperatureSensor Update rate = ${(1000 * this.temperatureSensorUpdateInterval)
+        / 1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         temp: newTemperature,
