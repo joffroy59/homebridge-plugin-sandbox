@@ -74,10 +74,6 @@ export class SandboxPlatformAccessory {
     let sensorIdentifier = accessory.context.device.motionSensorIdentifier1;
     const motionSensorOneService = this.createSensor(this.platform.Service.MotionSensor, sensorName, sensorIdentifier);
 
-    sensorName = accessory.context.device.motionSensorName2;
-    sensorIdentifier = accessory.context.device.motionSensorIdentifier2;
-    const motionSensorTwoService = this.createSensor(this.platform.Service.MotionSensor, sensorName, sensorIdentifier);
-
     // Add 1 "temperature sensor" services to the accessory
     sensorName = accessory.context.device.temperatureSensorName1;
     sensorIdentifier = accessory.context.device.temperatureSensorIdentifier1;
@@ -91,7 +87,7 @@ export class SandboxPlatformAccessory {
     // create handlers for required characteristics
     /* this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .onGet(this.handleCurrentTemperatureGet.bind(this)); */
-    this.createHandlers(motionSensorOneService, motionSensorTwoService);
+    this.createHandlers(motionSensorOneService);
   }
 
   private createSensor(sensorTypoe, sensorName, sensorIdentifier) {
@@ -113,7 +109,7 @@ export class SandboxPlatformAccessory {
    * the `updateCharacteristic` method.
    *
    */
-  private createHandlers(motionSensorOneService: Service, motionSensorTwoService: Service) {
+  private createHandlers(motionSensorOneService: Service) {
     let motionDetected = false;
     setInterval(() => {
       // EXAMPLE - inverse the trigger
@@ -121,7 +117,6 @@ export class SandboxPlatformAccessory {
 
       // push the new value to HomeKit
       motionSensorOneService.updateCharacteristic(this.platform.Characteristic.MotionDetected, motionDetected);
-      motionSensorTwoService.updateCharacteristic(this.platform.Characteristic.MotionDetected, !motionDetected);
 
       this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
       this.platform.log.info(`Update FakegatoService ${this.traceService(motionSensorOneService)}:`, motionDetected);
@@ -129,8 +124,6 @@ export class SandboxPlatformAccessory {
         time: new Date().getTime() / 1000,
         motion: motionDetected ? 1 : 0,
       });
-
-      this.platform.log.info('Triggering motionSensorTwoService:', !motionDetected);
     }, 1000 * this.updateInterval);
 
     let newTemperature = 0.0;
