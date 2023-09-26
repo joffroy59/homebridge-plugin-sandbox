@@ -43,12 +43,12 @@ export class SandboxPlatformAccessory {
 
     this.updateInterval = accessory.context.device.updateInterval;
     this.plateformeName = accessory.context.device.configDeviceName;
-    // this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
-    // this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensorUpdateInterval;
-    this.motionSensorUpdateInterval = 10;
+    this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
+    // this.motionSensorUpdateInterval = 10;
     this.logInfo(`motionSensorUpdateInterval=${this.motionSensorUpdateInterval}`);
 
-    this.temperatureSensorUpdateInterval = 10;
+    this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensorUpdateInterval;
+    // this.temperatureSensorUpdateInterval = 10;
     this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
     // get the LightBulb service if it exists, otherwise create a new LightBulb service
