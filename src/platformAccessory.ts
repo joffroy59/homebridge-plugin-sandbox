@@ -124,8 +124,8 @@ export class SandboxPlatformAccessory {
       motionSensorOneService.updateCharacteristic(this.platform.Characteristic.MotionDetected, motionDetected);
 
       this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
-      this.platform.log.info(`Update FakegatoService ${this.traceService(motionSensorOneService)}:`, motionDetected);
-      this.platform.log.info(`Update rate = ${ (1000 * this.motionSensorUpdateInterval )/1000}`);
+      this.platform.log.debug(`Update FakegatoService ${this.traceService(motionSensorOneService)}:`, motionDetected);
+      this.platform.log.debug(`MotionSensor Update rate = ${ (1000 * this.motionSensorUpdateInterval )/1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         motion: motionDetected ? 1 : 0,
@@ -142,6 +142,7 @@ export class SandboxPlatformAccessory {
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
       this.platform.log.info(`Triggering TemperatureService [${this.accessory.displayName}]:`, newTemperature);
       this.platform.log.debug(`Update FakegatoService ${this.traceService(this.temperatureService)}:`, newTemperature);
+      this.platform.log.debug(`TemperatureSensor Update rate = ${(1000 * this.temperatureSensorUpdateInterval) / 1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         temp: newTemperature,
