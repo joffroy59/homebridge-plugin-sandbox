@@ -12,6 +12,7 @@ export class SandboxPlatformAccessory {
   private service: Service;
   private temperatureService: Service;
   private fakegatoService: fakegato.FakeGatoHistoryService;
+  private log;
 
   /**
    * These are just used to create a working example
@@ -32,7 +33,8 @@ export class SandboxPlatformAccessory {
     private readonly accessory: PlatformAccessory,
   ) {
 
-    this.platform.log.info('Init  SandboxPlatformAccessory');
+    this.log = this.platform.log;
+    this.logInfo('Init  SandboxPlatformAccessory');
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, platform.config.manufacturer)
@@ -44,10 +46,10 @@ export class SandboxPlatformAccessory {
     // this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
     // this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensorUpdateInterval;
     this.motionSensorUpdateInterval = 10;
-    this.platform.log.info(`motionSensorUpdateInterval=${this.motionSensorUpdateInterval}`);
+    this.logInfo(`motionSensorUpdateInterval=${this.motionSensorUpdateInterval}`);
 
     this.temperatureSensorUpdateInterval = 10;
-    this.platform.log.info(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
+    this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
     // get the LightBulb service if it exists, otherwise create a new LightBulb service
     // you can create multiple services for each accessory
@@ -91,7 +93,7 @@ export class SandboxPlatformAccessory {
     this.temperatureService = this.createSensor(this.platform.Service.TemperatureSensor, sensorName, sensorIdentifier);
 
     const sn = this.initAccessoryInformation();
-    this.platform.log.info(`filename sn=${sn}`);
+    this.logInfo(`filename sn=${sn}`);
 
     this.initFakeGatoHistory();
 
@@ -102,7 +104,7 @@ export class SandboxPlatformAccessory {
   }
 
   private createSensor(sensorTypoe, sensorName, sensorIdentifier) {
-    this.platform.log.info(`createSensor or reuse  sensorName=${sensorName}, sensorIdentifier=${sensorIdentifier}`);
+    this.logInfo(`createSensor or reuse  sensorName=${sensorName}, sensorIdentifier=${sensorIdentifier}`);
     return this.accessory.getService(sensorName) || this.accessory.addService(sensorTypoe, sensorName, sensorIdentifier);
   }
 
@@ -129,10 +131,9 @@ export class SandboxPlatformAccessory {
       // push the new value to HomeKit
       motionSensorOneService.updateCharacteristic(this.platform.Characteristic.MotionDetected, motionDetected);
 
-      this.platform.log.info(`[${this.plateformeName}] Triggering motionSensorOneService: ${motionDetected}`);
-      this.platform.log.info(`[${this.plateformeName}] Update FakegatoService ${this.traceService(motionSensorOneService)}:`
-        , motionDetected);
-      this.platform.log.info(`[${this.plateformeName}] MotionSensor Update rate = ${ (1000 * this.motionSensorUpdateInterval )/1000}`);
+      this.logInfo(`[${this.plateformeName}] Triggering motionSensorOneService: ${motionDetected}`);
+      this.logInfo(`[${this.plateformeName}] Update FakegatoService ${this.traceService(motionSensorOneService)}: ${motionDetected}`);
+      this.logInfo(`[${this.plateformeName}] MotionSensor Update rate = ${ (1000 * this.motionSensorUpdateInterval )/1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         motion: motionDetected ? 1 : 0,
@@ -147,10 +148,11 @@ export class SandboxPlatformAccessory {
 
       // push the new value to HomeKit
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
-      this.platform.log.info(`[${this.plateformeName}] Triggering TemperatureService [${this.accessory.displayName}]:`, newTemperature);
-      this.platform.log.info(`[${this.plateformeName}] Update FakegatoService ${this.traceService(this.temperatureService)}:`
-        , newTemperature);
-      this.platform.log.info(`[${this.plateformeName}] TemperatureSensor Update rate = ${(1000 * this.temperatureSensorUpdateInterval)
+      this.logInfo(`[${this.plateformeName}] Triggering TemperatureService [${this.accessory.displayName}]: ${newTemperature
+      }`);
+      this.logInfo(`[${this.plateformeName}] Update FakegatoService ${this.traceService(this.temperatureService)}: `
+        + `${newTemperature}`);
+      this.logInfo(`[${this.plateformeName}] TemperatureSensor Update rate = ${(1000 * this.temperatureSensorUpdateInterval)
         / 1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
@@ -162,8 +164,7 @@ export class SandboxPlatformAccessory {
 
   private initFakeGatoHistory() {
     const filename = `fakegato-history_Sandbox-${this.accessory.displayName}.json`;
-    this.platform.log.info(`filename filename=${filename}`);
-    this.platform.log.info('filename filename=', filename);
+    this.logInfo(`filename filename=${filename}`);
     this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', this.accessory, {
       filename,
       disableTimer: true,
@@ -189,7 +190,7 @@ export class SandboxPlatformAccessory {
  * Handle requests to get the current value of the "Current Temperature" characteristic
  */
   handleCurrentTemperatureGet() {
-    this.platform.log.info('Triggered GET CurrentTemperature');
+    this.logInfo('Triggered GET CurrentTemperature');
 
     // set this to a valid value for CurrentTemperature
     const currentValue = 12.4;
@@ -205,7 +206,7 @@ export class SandboxPlatformAccessory {
     // implement your own code to turn your device on/off
     this.exampleStates.On = value as boolean;
 
-    this.platform.log.info('Set Characteristic On ->', value);
+    this.logInfo(`Set Characteristic On ->${value}`);
   }
 
   /**
@@ -225,7 +226,7 @@ export class SandboxPlatformAccessory {
     // implement your own code to check if the device is on
     const isOn = this.exampleStates.On;
 
-    this.platform.log.info('Get Characteristic On ->', isOn);
+    this.logInfo(`Get Characteristic On ->${isOn}`);
 
     // if you need to return an error to show the device as "Not Responding" in the Home app:
     // throw new this.platform.api.hap.HapStatusError(this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
@@ -241,7 +242,15 @@ export class SandboxPlatformAccessory {
     // implement your own code to set the brightness
     this.exampleStates.Brightness = value as number;
 
-    this.platform.log.info('Set Characteristic Brightness -> ', value);
+    this.logInfo(`Set Characteristic Brightness -> ${value}`);
+  }
+
+  private logInfo(msg: string) {
+    this.log.info(msg);
+  }
+
+  private logDebug(msg: string) {
+    this.log.debug(msg);
   }
 
 }
