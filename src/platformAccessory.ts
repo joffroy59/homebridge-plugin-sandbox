@@ -40,7 +40,7 @@ export class SandboxPlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
 
     this.updateInterval = accessory.context.device.updateInterval;
-    this.plateformeName = this.platform.config.name || 'Default';
+    this.plateformeName = accessory.context.device.configDeviceName;
     // this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
     // this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensorUpdateInterval;
     this.motionSensorUpdateInterval = 10;
