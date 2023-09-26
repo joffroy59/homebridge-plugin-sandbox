@@ -125,6 +125,7 @@ export class SandboxPlatformAccessory {
 
       this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
       this.platform.log.info(`Update FakegatoService ${this.traceService(motionSensorOneService)}:`, motionDetected);
+      this.platform.log.info(`Update rate = ${ (1000 * this.motionSensorUpdateInterval )/1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         motion: motionDetected ? 1 : 0,
