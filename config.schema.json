@@ -44,6 +44,12 @@
                   "default": "10",
                   "required": false
                 },
+                "disableLightBulb": {
+                  "title": "Disable LightBulb",
+                  "type": "boolean",
+                  "default": false,
+                  "required": true
+                },
                 "motionSensorUpdateInterval": {
                   "title": "Interval in which the state of the Motion Service should be updated (in seconds)",
                   "type": "number",

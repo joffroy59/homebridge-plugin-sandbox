@@ -27,6 +27,8 @@ export class SandboxPlatformAccessory {
   private motionSensorUpdateInterval: number;
   private temperatureSensorUpdateInterval: number;
 
+  private disableLightBulb: boolean;
+
   private configDeviceName: string;
 
   constructor(
@@ -43,6 +45,7 @@ export class SandboxPlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
 
     this.updateInterval = accessory.context.device.updateInterval;
+    this.disableLightBulb = accessory.context.device.disableLightBulb;
     this.configDeviceName = accessory.context.device.configDeviceName;
     this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
     // this.motionSensorUpdateInterval = 10;
@@ -52,7 +55,9 @@ export class SandboxPlatformAccessory {
     // this.temperatureSensorUpdateInterval = 10;
     this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
-    this.service = createLightBuld(this);
+    if (!this.disableLightBulb){
+      this.service = createLightBuld(this);
+    }
 
     /**
      * Creating multiple services of the same type.
