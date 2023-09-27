@@ -55,7 +55,9 @@ export class SandboxPlatformAccessory {
     // this.temperatureSensorUpdateInterval = 10;
     this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
+    this.logInfo(`create LightBulb servcie ? (disableLightBulb=${this.disableLightBulb})`);
     if (!this.disableLightBulb){
+      this.logInfo(`create LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
       this.service = createLightBuld(this, accessory.context.device.configDeviceName);
     }
 
