@@ -52,7 +52,7 @@ export class SandboxPlatformAccessory {
     // this.temperatureSensorUpdateInterval = 10;
     this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
-    createLightBuld(this);
+    this.service = createLightBuld(this);
 
     /**
      * Creating multiple services of the same type.
@@ -88,7 +88,7 @@ export class SandboxPlatformAccessory {
     // get the LightBulb service if it exists, otherwise create a new LightBulb service
     // you can create multiple services for each accessory
     function createLightBuld(accessory: SandboxPlatformAccessory) {
-      accessory.service = accessory.accessory.getService(accessory.platform.Service.Lightbulb)
+      const service = accessory.accessory.getService(accessory.platform.Service.Lightbulb)
         || accessory.accessory.addService(accessory.platform.Service.Lightbulb);
 
       // set the service name, this is what is displayed as the default name on the Home app
@@ -106,6 +106,8 @@ export class SandboxPlatformAccessory {
       // register handlers for the Brightness Characteristic
       accessory.service.getCharacteristic(accessory.platform.Characteristic.Brightness)
         .onSet(accessory.setBrightness.bind(accessory));       // SET - bind to the 'setBrightness` method below
+
+      return service;
     }
   }
 
