@@ -9,7 +9,7 @@ import fakegato from 'fakegato-history';
  * Each accessory may expose multiple services of different service types.
  */
 export class SandboxPlatformAccessory {
-  private service: Service;
+  private service?: Service;
   private temperatureService: Service;
   private fakegatoService: fakegato.FakeGatoHistoryService;
   private log: Logger;
@@ -56,7 +56,7 @@ export class SandboxPlatformAccessory {
     this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
     if (!this.disableLightBulb){
-      this.service = createLightBuld(this);
+      this.service = createLightBuld(this, accessory.context.device.configDeviceName);
     }
 
     /**
@@ -92,24 +92,24 @@ export class SandboxPlatformAccessory {
 
     // get the LightBulb service if it exists, otherwise create a new LightBulb service
     // you can create multiple services for each accessory
-    function createLightBuld(accessory: SandboxPlatformAccessory) {
+    function createLightBuld(accessory: SandboxPlatformAccessory, deviceConfigDeviceName: string) {
       const service = accessory.accessory.getService(accessory.platform.Service.Lightbulb)
         || accessory.accessory.addService(accessory.platform.Service.Lightbulb);
 
       // set the service name, this is what is displayed as the default name on the Home app
       // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
-      accessory.service.setCharacteristic(accessory.platform.Characteristic.Name, accessory.context.device.configDeviceName);
+      service.setCharacteristic(accessory.platform.Characteristic.Name, deviceConfigDeviceName);
 
       // each service must implement at-minimum the "required characteristics" for the given service type
       // see https://developers.homebridge.io/#/service/Lightbulb
       // register handlers for the On/Off Characteristic
-      accessory.service.getCharacteristic(accessory.platform.Characteristic.On)
+      service.getCharacteristic(accessory.platform.Characteristic.On)
         .onSet(accessory.setOn.bind(accessory)) // SET - bind to the `setOn` method below
         .onGet(accessory.getOn.bind(accessory)); // GET - bind to the `getOn` method below
 
 
       // register handlers for the Brightness Characteristic
-      accessory.service.getCharacteristic(accessory.platform.Characteristic.Brightness)
+      service.getCharacteristic(accessory.platform.Characteristic.Brightness)
         .onSet(accessory.setBrightness.bind(accessory));       // SET - bind to the 'setBrightness` method below
 
       return service;
