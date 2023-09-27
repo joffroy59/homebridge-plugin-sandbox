@@ -1,4 +1,4 @@
-import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
+import { Service, PlatformAccessory, CharacteristicValue, Logger } from 'homebridge';
 
 import { SandboxHomebridgePlatform } from './platform';
 import fakegato from 'fakegato-history';
@@ -12,7 +12,7 @@ export class SandboxPlatformAccessory {
   private service: Service;
   private temperatureService: Service;
   private fakegatoService: fakegato.FakeGatoHistoryService;
-  private log;
+  private log: Logger;
 
   /**
    * These are just used to create a working example
@@ -26,7 +26,8 @@ export class SandboxPlatformAccessory {
   private updateInterval: number;
   private motionSensorUpdateInterval: number;
   private temperatureSensorUpdateInterval: number;
-  private plateformeName: string;
+
+  private configDeviceName: string;
 
   constructor(
     private readonly platform: SandboxHomebridgePlatform,
@@ -42,7 +43,7 @@ export class SandboxPlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
 
     this.updateInterval = accessory.context.device.updateInterval;
-    this.plateformeName = accessory.context.device.configDeviceName;
+    this.configDeviceName = accessory.context.device.configDeviceName;
     this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
     // this.motionSensorUpdateInterval = 10;
     this.logInfo(`motionSensorUpdateInterval=${this.motionSensorUpdateInterval}`);
@@ -246,7 +247,7 @@ export class SandboxPlatformAccessory {
   }
 
   private logInfo(msg: string) {
-    this.log.info(`[${this.plateformeName}]  ${msg}`);
+    this.log.info(`[${this.configDeviceName}]  ${msg}`);
   }
 
   private logDebug(msg: string) {
