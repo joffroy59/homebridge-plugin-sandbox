@@ -52,25 +52,7 @@ export class SandboxPlatformAccessory {
     // this.temperatureSensorUpdateInterval = 10;
     this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
-    // get the LightBulb service if it exists, otherwise create a new LightBulb service
-    // you can create multiple services for each accessory
-    this.service = this.accessory.getService(this.platform.Service.Lightbulb) || this.accessory.addService(this.platform.Service.Lightbulb);
-
-    // set the service name, this is what is displayed as the default name on the Home app
-    // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
-    this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.configDeviceName);
-
-    // each service must implement at-minimum the "required characteristics" for the given service type
-    // see https://developers.homebridge.io/#/service/Lightbulb
-
-    // register handlers for the On/Off Characteristic
-    this.service.getCharacteristic(this.platform.Characteristic.On)
-      .onSet(this.setOn.bind(this))                // SET - bind to the `setOn` method below
-      .onGet(this.getOn.bind(this));               // GET - bind to the `getOn` method below
-
-    // register handlers for the Brightness Characteristic
-    this.service.getCharacteristic(this.platform.Characteristic.Brightness)
-      .onSet(this.setBrightness.bind(this));       // SET - bind to the 'setBrightness` method below
+    createLightBuld(this);
 
     /**
      * Creating multiple services of the same type.
@@ -102,6 +84,29 @@ export class SandboxPlatformAccessory {
     /* this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .onGet(this.handleCurrentTemperatureGet.bind(this)); */
     this.createHandlers(motionSensorOneService);
+
+    // get the LightBulb service if it exists, otherwise create a new LightBulb service
+    // you can create multiple services for each accessory
+    function createLightBuld(accessory: SandboxPlatformAccessory) {
+      accessory.service = accessory.accessory.getService(accessory.platform.Service.Lightbulb)
+        || accessory.accessory.addService(accessory.platform.Service.Lightbulb);
+
+      // set the service name, this is what is displayed as the default name on the Home app
+      // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
+      accessory.service.setCharacteristic(accessory.platform.Characteristic.Name, accessory.context.device.configDeviceName);
+
+      // each service must implement at-minimum the "required characteristics" for the given service type
+      // see https://developers.homebridge.io/#/service/Lightbulb
+      // register handlers for the On/Off Characteristic
+      accessory.service.getCharacteristic(accessory.platform.Characteristic.On)
+        .onSet(accessory.setOn.bind(accessory)) // SET - bind to the `setOn` method below
+        .onGet(accessory.getOn.bind(accessory)); // GET - bind to the `getOn` method below
+
+
+      // register handlers for the Brightness Characteristic
+      accessory.service.getCharacteristic(accessory.platform.Characteristic.Brightness)
+        .onSet(accessory.setBrightness.bind(accessory));       // SET - bind to the 'setBrightness` method below
+    }
   }
 
   private createSensor(sensorTypoe, sensorName, sensorIdentifier) {
