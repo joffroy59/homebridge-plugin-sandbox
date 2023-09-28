@@ -45,7 +45,7 @@ export class SandboxPlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
 
     this.updateInterval = accessory.context.device.updateInterval;
-    this.disableLightBulb = accessory.context.device.disableLightBulb;
+    this.disableLightBulb = accessory.context.device.lightBulb.disableLightBulb;
     this.configDeviceName = accessory.context.device.configDeviceName;
     this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
     this.logInfo(`motionSensorUpdateInterval=${this.motionSensorUpdateInterval}`);
