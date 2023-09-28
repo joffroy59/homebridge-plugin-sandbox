@@ -9,7 +9,7 @@ import fakegato from 'fakegato-history';
  * Each accessory may expose multiple services of different service types.
  */
 export class SandboxPlatformAccessory {
-  private service: Service;
+  private service?: Service;
   private temperatureService: Service;
   private fakegatoService: fakegato.FakeGatoHistoryService;
   private log: Logger;
@@ -27,6 +27,8 @@ export class SandboxPlatformAccessory {
   private motionSensorUpdateInterval: number;
   private temperatureSensorUpdateInterval: number;
 
+  private disableLightBulb: boolean;
+
   private configDeviceName: string;
 
   constructor(
@@ -43,34 +45,22 @@ export class SandboxPlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
 
     this.updateInterval = accessory.context.device.updateInterval;
+    this.disableLightBulb = accessory.context.device.disableLightBulb;
     this.configDeviceName = accessory.context.device.configDeviceName;
     this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
-    // this.motionSensorUpdateInterval = 10;
     this.logInfo(`motionSensorUpdateInterval=${this.motionSensorUpdateInterval}`);
 
     this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensorUpdateInterval;
-    // this.temperatureSensorUpdateInterval = 10;
     this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
-    // get the LightBulb service if it exists, otherwise create a new LightBulb service
-    // you can create multiple services for each accessory
-    this.service = this.accessory.getService(this.platform.Service.Lightbulb) || this.accessory.addService(this.platform.Service.Lightbulb);
-
-    // set the service name, this is what is displayed as the default name on the Home app
-    // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
-    this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.configDeviceName);
-
-    // each service must implement at-minimum the "required characteristics" for the given service type
-    // see https://developers.homebridge.io/#/service/Lightbulb
-
-    // register handlers for the On/Off Characteristic
-    this.service.getCharacteristic(this.platform.Characteristic.On)
-      .onSet(this.setOn.bind(this))                // SET - bind to the `setOn` method below
-      .onGet(this.getOn.bind(this));               // GET - bind to the `getOn` method below
-
-    // register handlers for the Brightness Characteristic
-    this.service.getCharacteristic(this.platform.Characteristic.Brightness)
-      .onSet(this.setBrightness.bind(this));       // SET - bind to the 'setBrightness` method below
+    this.logInfo(`create LightBulb servcie ? (disableLightBulb=${this.disableLightBulb})`);
+    if (!this.disableLightBulb){
+      this.logInfo(`create LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
+      this.createLightBuld();
+    } else {
+      this.logInfo(`remove LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
+      this.removeLightBuld();
+    }
 
     /**
      * Creating multiple services of the same type.
@@ -102,6 +92,40 @@ export class SandboxPlatformAccessory {
     /* this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .onGet(this.handleCurrentTemperatureGet.bind(this)); */
     this.createHandlers(motionSensorOneService);
+  }
+
+  /**
+   * get the LightBulb service if it exists, otherwise create a new LightBulb service
+   */
+  private createLightBuld() {
+    this.service = this.accessory.getService(this.platform.Service.Lightbulb)
+      || this.accessory.addService(this.platform.Service.Lightbulb);
+
+    // set the service name, this is what is displayed as the default name on the Home app
+    // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
+    this.service.setCharacteristic(this.platform.Characteristic.Name, this.accessory.context.device.configDeviceName);
+
+    // each service must implement at-minimum the "required characteristics" for the given service type
+    // see https://developers.homebridge.io/#/service/Lightbulb
+    // register handlers for the On/Off Characteristic
+    this.service.getCharacteristic(this.platform.Characteristic.On)
+      .onSet(this.setOn.bind(this))                 // SET - bind to the `setOn` method below
+      .onGet(this.getOn.bind(this));                // GET - bind to the `getOn` method below
+
+    // register handlers for the Brightness Characteristic
+    this.service.getCharacteristic(this.platform.Characteristic.Brightness)
+      .onSet(this.setBrightness.bind(this));       // SET - bind to the 'setBrightness` method below
+  }
+
+
+  /**
+   * Remove existingLightBulb service if it exists
+   */
+  private removeLightBuld() {
+    const service = this.accessory.getService(this.platform.Service.Lightbulb);
+    if (service){
+      this.accessory.removeService(service);
+    }
   }
 
   private createSensor(sensorTypoe, sensorName, sensorIdentifier) {
@@ -207,7 +231,7 @@ export class SandboxPlatformAccessory {
     // implement your own code to turn your device on/off
     this.exampleStates.On = value as boolean;
 
-    this.logInfo(`Set Characteristic On ->${value}`);
+    this.logInfo(`LightBulb servcie Set Characteristic On ->${value}`);
   }
 
   /**
@@ -227,7 +251,7 @@ export class SandboxPlatformAccessory {
     // implement your own code to check if the device is on
     const isOn = this.exampleStates.On;
 
-    this.logInfo(`Get Characteristic On ->${isOn}`);
+    this.logInfo(`LightBulb servcie Triggering LightBulb : Get Characteristic On ->${isOn}`);
 
     // if you need to return an error to show the device as "Not Responding" in the Home app:
     // throw new this.platform.api.hap.HapStatusError(this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
@@ -243,7 +267,7 @@ export class SandboxPlatformAccessory {
     // implement your own code to set the brightness
     this.exampleStates.Brightness = value as number;
 
-    this.logInfo(`Set Characteristic Brightness -> ${value}`);
+    this.logInfo(`Triggering LightBulb : Set Characteristic Brightness -> ${value}`);
   }
 
   private logInfo(msg: string) {
