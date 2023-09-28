@@ -53,7 +53,9 @@ export class SandboxPlatformAccessory {
     this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensorUpdateInterval;
     this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
+    this.logInfo(`create LightBulb servcie ? (disableLightBulb=${this.disableLightBulb})`);
     if (!this.disableLightBulb){
+      this.logInfo(`create LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
       this.createLightBuld();
     } else {
       this.logInfo(`remove LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
@@ -229,7 +231,7 @@ export class SandboxPlatformAccessory {
     // implement your own code to turn your device on/off
     this.exampleStates.On = value as boolean;
 
-    this.logInfo(`Set Characteristic On ->${value}`);
+    this.logInfo(`LightBulb servcie Set Characteristic On ->${value}`);
   }
 
   /**
@@ -249,7 +251,7 @@ export class SandboxPlatformAccessory {
     // implement your own code to check if the device is on
     const isOn = this.exampleStates.On;
 
-    this.logInfo(`Get Characteristic On ->${isOn}`);
+    this.logInfo(`LightBulb servcie Triggering LightBulb : Get Characteristic On ->${isOn}`);
 
     // if you need to return an error to show the device as "Not Responding" in the Home app:
     // throw new this.platform.api.hap.HapStatusError(this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
@@ -265,7 +267,7 @@ export class SandboxPlatformAccessory {
     // implement your own code to set the brightness
     this.exampleStates.Brightness = value as number;
 
-    this.logInfo(`Set Characteristic Brightness -> ${value}`);
+    this.logInfo(`Triggering LightBulb : Set Characteristic Brightness -> ${value}`);
   }
 
   private logInfo(msg: string) {
