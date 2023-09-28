@@ -94,6 +94,7 @@ export class SandboxHomebridgePlatform implements DynamicPlatformPlugin {
 
           // create the accessory handler for the restored accessory
           // this is imported from `platformAccessory.ts`
+          existingAccessory.context.device = device;
           new SandboxPlatformAccessory(this, existingAccessory);
         } else {
           // the accessory does not yet exist, so we need to create it

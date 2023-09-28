@@ -22,16 +22,30 @@ export type options = {
     model?: string;
 };
 
+
+export type lightBulb = {
+    disableLightBulb?: boolean | false;
+};
+
+export type motionSensor = {
+    motionSensorUpdateInterval?: number | 5;
+    motionSensorName1?: string;
+    motionSensorIdentifier1?: string;
+};
+
+export type temperatureSensor = {
+    temperatureSensorUpdateInterval?: number | 7;
+    temperatureSensorName1?: string;
+    temperatureSensorIdentifier1?: string;
+};
+
 export interface devicesConfig extends device {
     configDeviceName?: string;
     uniqueId?: string;
     updateInterval?: number | 5;
-    motionSensorName1?: string;
-    motionSensorIdentifier1?: string;
-    motionSensorName2?: string;
-    motionSensorIdentifier2?: string;
-    temperatureSensorName1?: string;
-    temperatureSensorIdentifier1?: string;
+    lightBulb: lightBulb;
+    motionSensor: motionSensor;
+    temperatureSensor: temperatureSensor;
 }
 
 export type device = {

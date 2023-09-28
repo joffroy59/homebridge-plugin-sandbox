@@ -1,4 +1,4 @@
-import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
+import { Service, PlatformAccessory, CharacteristicValue, Logger } from 'homebridge';
 
 import { SandboxHomebridgePlatform } from './platform';
 import fakegato from 'fakegato-history';
@@ -9,9 +9,10 @@ import fakegato from 'fakegato-history';
  * Each accessory may expose multiple services of different service types.
  */
 export class SandboxPlatformAccessory {
-  private service: Service;
+  private service?: Service;
   private temperatureService: Service;
   private fakegatoService: fakegato.FakeGatoHistoryService;
+  private log: Logger;
 
   /**
    * These are just used to create a working example
@@ -23,40 +24,44 @@ export class SandboxPlatformAccessory {
   };
 
   private updateInterval: number;
+  private motionSensorUpdateInterval: number;
+  private temperatureSensorUpdateInterval: number;
+
+  private disableLightBulb: boolean;
+
+  private configDeviceName: string;
 
   constructor(
     private readonly platform: SandboxHomebridgePlatform,
     private readonly accessory: PlatformAccessory,
   ) {
 
-    this.platform.log.info('Init  SandboxPlatformAccessory');
+    this.log = this.platform.log;
+    this.logInfo('Init  SandboxPlatformAccessory');
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, platform.config.manufacturer)
       .setCharacteristic(this.platform.Characteristic.Model, platform.config.model)
-      .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
+      .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName)
+      .setCharacteristic(this.platform.Characteristic.ProductData, accessory.context.device.temperatureSensorUpdateInterval);
 
     this.updateInterval = accessory.context.device.updateInterval;
+    this.disableLightBulb = accessory.context.device.lightBulb.disableLightBulb;
+    this.configDeviceName = accessory.context.device.configDeviceName;
+    this.motionSensorUpdateInterval = accessory.context.device.motionSensor.motionSensorUpdateInterval;
+    this.logInfo(`motionSensorUpdateInterval=${this.motionSensorUpdateInterval}`);
 
-    // get the LightBulb service if it exists, otherwise create a new LightBulb service
-    // you can create multiple services for each accessory
-    this.service = this.accessory.getService(this.platform.Service.Lightbulb) || this.accessory.addService(this.platform.Service.Lightbulb);
+    this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensor.temperatureSensorUpdateInterval;
+    this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
-    // set the service name, this is what is displayed as the default name on the Home app
-    // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
-    this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.configDeviceName);
-
-    // each service must implement at-minimum the "required characteristics" for the given service type
-    // see https://developers.homebridge.io/#/service/Lightbulb
-
-    // register handlers for the On/Off Characteristic
-    this.service.getCharacteristic(this.platform.Characteristic.On)
-      .onSet(this.setOn.bind(this))                // SET - bind to the `setOn` method below
-      .onGet(this.getOn.bind(this));               // GET - bind to the `getOn` method below
-
-    // register handlers for the Brightness Characteristic
-    this.service.getCharacteristic(this.platform.Characteristic.Brightness)
-      .onSet(this.setBrightness.bind(this));       // SET - bind to the 'setBrightness` method below
+    this.logInfo(`create LightBulb servcie ? (disableLightBulb=${this.disableLightBulb})`);
+    if (!this.disableLightBulb){
+      this.logInfo(`create LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
+      this.createLightBuld();
+    } else {
+      this.logInfo(`remove LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
+      this.removeLightBuld();
+    }
 
     /**
      * Creating multiple services of the same type.
@@ -70,32 +75,62 @@ export class SandboxPlatformAccessory {
      */
 
     // Example: add two "motion sensor" services to the accessory
-    let sensorName = accessory.context.device.motionSensorName1;
-    let sensorIdentifier = accessory.context.device.motionSensorIdentifier1;
+    let sensorName = accessory.context.device.motionSensor.motionSensorName1;
+    let sensorIdentifier = accessory.context.device.motionSensor.motionSensorIdentifier1;
     const motionSensorOneService = this.createSensor(this.platform.Service.MotionSensor, sensorName, sensorIdentifier);
 
-    sensorName = accessory.context.device.motionSensorName2;
-    sensorIdentifier = accessory.context.device.motionSensorIdentifier2;
-    const motionSensorTwoService = this.createSensor(this.platform.Service.MotionSensor, sensorName, sensorIdentifier);
-
     // Add 1 "temperature sensor" services to the accessory
-    sensorName = accessory.context.device.temperatureSensorName1;
-    sensorIdentifier = accessory.context.device.temperatureSensorIdentifier1;
+    sensorName = accessory.context.device.temperatureSensor.temperatureSensorName1;
+    sensorIdentifier = accessory.context.device.temperatureSensor.temperatureSensorIdentifier1;
     this.temperatureService = this.createSensor(this.platform.Service.TemperatureSensor, sensorName, sensorIdentifier);
 
     const sn = this.initAccessoryInformation();
-    this.platform.log.info(`filename sn=${sn}`);
+    this.logInfo(`filename sn=${sn}`);
 
     this.initFakeGatoHistory();
 
     // create handlers for required characteristics
     /* this.temperatureService.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .onGet(this.handleCurrentTemperatureGet.bind(this)); */
-    this.createHandlers(motionSensorOneService, motionSensorTwoService);
+    this.createHandlers(motionSensorOneService);
+  }
+
+  /**
+   * get the LightBulb service if it exists, otherwise create a new LightBulb service
+   */
+  private createLightBuld() {
+    this.service = this.accessory.getService(this.platform.Service.Lightbulb)
+      || this.accessory.addService(this.platform.Service.Lightbulb);
+
+    // set the service name, this is what is displayed as the default name on the Home app
+    // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
+    this.service.setCharacteristic(this.platform.Characteristic.Name, this.accessory.context.device.configDeviceName);
+
+    // each service must implement at-minimum the "required characteristics" for the given service type
+    // see https://developers.homebridge.io/#/service/Lightbulb
+    // register handlers for the On/Off Characteristic
+    this.service.getCharacteristic(this.platform.Characteristic.On)
+      .onSet(this.setOn.bind(this))                 // SET - bind to the `setOn` method below
+      .onGet(this.getOn.bind(this));                // GET - bind to the `getOn` method below
+
+    // register handlers for the Brightness Characteristic
+    this.service.getCharacteristic(this.platform.Characteristic.Brightness)
+      .onSet(this.setBrightness.bind(this));       // SET - bind to the 'setBrightness` method below
+  }
+
+
+  /**
+   * Remove existingLightBulb service if it exists
+   */
+  private removeLightBuld() {
+    const service = this.accessory.getService(this.platform.Service.Lightbulb);
+    if (service){
+      this.accessory.removeService(service);
+    }
   }
 
   private createSensor(sensorTypoe, sensorName, sensorIdentifier) {
-    this.platform.log.info(`createSensor or reuse  sensorName=${sensorName}, sensorIdentifier=${sensorIdentifier}`);
+    this.logInfo(`createSensor or reuse  sensorName=${sensorName}, sensorIdentifier=${sensorIdentifier}`);
     return this.accessory.getService(sensorName) || this.accessory.addService(sensorTypoe, sensorName, sensorIdentifier);
   }
 
@@ -113,7 +148,7 @@ export class SandboxPlatformAccessory {
    * the `updateCharacteristic` method.
    *
    */
-  private createHandlers(motionSensorOneService: Service, motionSensorTwoService: Service) {
+  private createHandlers(motionSensorOneService: Service) {
     let motionDetected = false;
     setInterval(() => {
       // EXAMPLE - inverse the trigger
@@ -121,17 +156,16 @@ export class SandboxPlatformAccessory {
 
       // push the new value to HomeKit
       motionSensorOneService.updateCharacteristic(this.platform.Characteristic.MotionDetected, motionDetected);
-      motionSensorTwoService.updateCharacteristic(this.platform.Characteristic.MotionDetected, !motionDetected);
 
-      this.platform.log.info('Triggering motionSensorOneService:', motionDetected);
-      this.platform.log.info(`Update FakegatoService ${this.traceService(motionSensorOneService)}:`, motionDetected);
+      this.logInfo(`Triggering motionSensorOneService: ${motionDetected}`);
+      this.logInfo(`Update FakegatoService ${this.traceService(motionSensorOneService)}: ${motionDetected}`);
+      this.logInfo(`MotionSensor Update rate = ${ (1000 * this.motionSensorUpdateInterval )/1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         motion: motionDetected ? 1 : 0,
       });
-
-      this.platform.log.info('Triggering motionSensorTwoService:', !motionDetected);
-    }, 1000 * this.updateInterval);
+    }, 1000 * this.motionSensorUpdateInterval);
+    //TODO use default this.updateInterval if not set
 
     let newTemperature = 0.0;
     setInterval(() => {
@@ -140,20 +174,23 @@ export class SandboxPlatformAccessory {
 
       // push the new value to HomeKit
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, newTemperature);
-      this.platform.log.info(`Triggering TemperatureService [${this.accessory.displayName}]:`, newTemperature);
-
-      this.platform.log.info(`Update FakegatoService ${this.traceService(this.temperatureService)}:`, newTemperature);
+      this.logInfo(`Triggering TemperatureService [${this.accessory.displayName}]: ${newTemperature
+      }`);
+      this.logInfo(`Update FakegatoService ${this.traceService(this.temperatureService)}: `
+        + `${newTemperature}`);
+      this.logInfo(`TemperatureSensor Update rate = ${(1000 * this.temperatureSensorUpdateInterval)
+        / 1000}`);
       this.fakegatoService.addEntry({
         time: new Date().getTime() / 1000,
         temp: newTemperature,
       });
-    }, 1000 * this.updateInterval);
+    }, 1000 * this.temperatureSensorUpdateInterval);
+    //TODO use default this.updateInterval if not set
   }
 
   private initFakeGatoHistory() {
     const filename = `fakegato-history_Sandbox-${this.accessory.displayName}.json`;
-    this.platform.log.info(`filename filename=${filename}`);
-    this.platform.log.info('filename filename=', filename);
+    this.logInfo(`filename filename=${filename}`);
     this.fakegatoService = new this.platform.FakeGatoHistoryService('custom', this.accessory, {
       filename,
       disableTimer: true,
@@ -179,7 +216,7 @@ export class SandboxPlatformAccessory {
  * Handle requests to get the current value of the "Current Temperature" characteristic
  */
   handleCurrentTemperatureGet() {
-    this.platform.log.info('Triggered GET CurrentTemperature');
+    this.logInfo('Triggered GET CurrentTemperature');
 
     // set this to a valid value for CurrentTemperature
     const currentValue = 12.4;
@@ -195,7 +232,7 @@ export class SandboxPlatformAccessory {
     // implement your own code to turn your device on/off
     this.exampleStates.On = value as boolean;
 
-    this.platform.log.debug('Set Characteristic On ->', value);
+    this.logInfo(`LightBulb servcie Set Characteristic On ->${value}`);
   }
 
   /**
@@ -215,7 +252,7 @@ export class SandboxPlatformAccessory {
     // implement your own code to check if the device is on
     const isOn = this.exampleStates.On;
 
-    this.platform.log.debug('Get Characteristic On ->', isOn);
+    this.logInfo(`LightBulb servcie Triggering LightBulb : Get Characteristic On ->${isOn}`);
 
     // if you need to return an error to show the device as "Not Responding" in the Home app:
     // throw new this.platform.api.hap.HapStatusError(this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
@@ -231,7 +268,15 @@ export class SandboxPlatformAccessory {
     // implement your own code to set the brightness
     this.exampleStates.Brightness = value as number;
 
-    this.platform.log.debug('Set Characteristic Brightness -> ', value);
+    this.logInfo(`Triggering LightBulb : Set Characteristic Brightness -> ${value}`);
+  }
+
+  private logInfo(msg: string) {
+    this.log.info(`[${this.configDeviceName}]  ${msg}`);
+  }
+
+  private logDebug(msg: string) {
+    this.log.debug(msg);
   }
 
 }

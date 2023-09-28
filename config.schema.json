@@ -44,41 +44,62 @@
                   "default": "10",
                   "required": false
                 },
-                "motionSensorName1": {
-                  "title": "Motion Sensor Name",
-                  "type": "string",
-                  "required": true,
-                  "default": "Sandbox Motion Sensor One Name"
+                "lightBulb": {
+                  "type": "object",
+                  "properties": {
+                    "disableLightBulb": {
+                      "title": "Disable LightBulb",
+                      "type": "boolean",
+                      "default": false,
+                      "required": true
+                    }
+                  }
                 },
-                "motionSensorIdentifier1": {
-                  "title": "Motion Sensor Identifier",
-                  "type": "string",
-                  "required": true,
-                  "default": "Sandbox-Sensor-Motion-YourUniqueIdentifier-1"
+                "motionSensor": {
+                  "type": "object",
+                  "properties": {
+                    "motionSensorUpdateInterval": {
+                      "title": "Interval in which the state of the Motion Service should be updated (in seconds)",
+                      "type": "number",
+                      "default": "300",
+                      "required": false
+                    },
+                    "motionSensorName1": {
+                      "title": "Motion Sensor Name",
+                      "type": "string",
+                      "required": true,
+                      "default": "Sandbox Motion Sensor One Name"
+                    },
+                    "motionSensorIdentifier1": {
+                      "title": "Motion Sensor Identifier",
+                      "type": "string",
+                      "required": true,
+                      "default": "Sandbox-Sensor-Motion-YourUniqueIdentifier-1"
+                    }
+                  }
                 },
-                "motionSensorName2": {
-                  "title": "Motion Sensor Name",
-                  "type": "string",
-                  "required": true,
-                  "default": "Sandbox Motion Sensor Two Name"
-                },
-                "motionSensorIdentifier2": {
-                  "title": "Motion Sensor Identifier",
-                  "type": "string",
-                  "required": true,
-                  "default": "Sandbox-Sensor-Motion-YourUniqueIdentifier-2"
-                },
-                "temperatureSensorName1": {
-                  "title": "Temperature Sensor Name",
-                  "type": "string",
-                  "required": true,
-                  "default": "Sandbox Temperature Sensor One Name"
-                },
-                "temperatureSensorIdentifier1": {
-                  "title": "Temperature Sensor Identifier",
-                  "type": "string",
-                  "required": true,
-                  "default": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                "temperatureSensor": {
+                  "type": "object",
+                  "properties": {
+                    "temperatureSensorUpdateInterval": {
+                      "title": "Interval in which the state of the Temperature Service should be updated (in seconds)",
+                      "type": "number",
+                      "default": "300",
+                      "required": false
+                    },
+                    "temperatureSensorName1": {
+                      "title": "Temperature Sensor Name",
+                      "type": "string",
+                      "required": true,
+                      "default": "Sandbox Temperature Sensor One Name"
+                    },
+                    "temperatureSensorIdentifier1": {
+                      "title": "Temperature Sensor Identifier",
+                      "type": "string",
+                      "required": true,
+                      "default": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                    }
+                  }
                 }
               }
             }
