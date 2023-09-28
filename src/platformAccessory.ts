@@ -42,7 +42,8 @@ export class SandboxPlatformAccessory {
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, platform.config.manufacturer)
       .setCharacteristic(this.platform.Characteristic.Model, platform.config.model)
-      .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName);
+      .setCharacteristic(this.platform.Characteristic.SerialNumber, platform.config.serialNumber + '-' + accessory.displayName)
+      .setCharacteristic(this.platform.Characteristic.ProductData, accessory.context.device.temperatureSensorUpdateInterval);
 
     this.updateInterval = accessory.context.device.updateInterval;
     this.disableLightBulb = accessory.context.device.lightBulb.disableLightBulb;
