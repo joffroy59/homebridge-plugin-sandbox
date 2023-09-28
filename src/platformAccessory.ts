@@ -58,7 +58,25 @@ export class SandboxPlatformAccessory {
     this.logInfo(`create LightBulb servcie ? (disableLightBulb=${this.disableLightBulb})`);
     if (!this.disableLightBulb){
       this.logInfo(`create LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
-      this.service = createLightBuld(this, accessory.context.device.configDeviceName);
+      //this.service = createLightBuld(this, accessory.context.device.configDeviceName);
+
+      this.service = this.accessory.getService(this.platform.Service.Lightbulb)
+        || this.accessory.addService(this.platform.Service.Lightbulb);
+
+      // set the service name, this is what is displayed as the default name on the Home app
+      // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
+      this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.configDeviceName);
+
+      // each service must implement at-minimum the "required characteristics" for the given service type
+      // see https://developers.homebridge.io/#/service/Lightbulb
+      // register handlers for the On/Off Characteristic
+      this.service.getCharacteristic(this.platform.Characteristic.On)
+        .onSet(this.setOn.bind(this)) // SET - bind to the `setOn` method below
+        .onGet(this.getOn.bind(this)); // GET - bind to the `getOn` method below
+
+      // register handlers for the Brightness Characteristic
+      this.service.getCharacteristic(this.platform.Characteristic.Brightness)
+        .onSet(this.setBrightness.bind(accessory));       // SET - bind to the 'setBrightness` method below
     } else {
       this.logInfo(`remove LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
       removeLightBuld(this);
