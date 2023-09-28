@@ -69,14 +69,15 @@ export class SandboxPlatformAccessory {
 
       // each service must implement at-minimum the "required characteristics" for the given service type
       // see https://developers.homebridge.io/#/service/Lightbulb
+
       // register handlers for the On/Off Characteristic
       this.service.getCharacteristic(this.platform.Characteristic.On)
-        .onSet(this.setOn.bind(this)) // SET - bind to the `setOn` method below
-        .onGet(this.getOn.bind(this)); // GET - bind to the `getOn` method below
+        .onSet(this.setOn.bind(this))                // SET - bind to the `setOn` method below
+        .onGet(this.getOn.bind(this));               // GET - bind to the `getOn` method below
 
       // register handlers for the Brightness Characteristic
       this.service.getCharacteristic(this.platform.Characteristic.Brightness)
-        .onSet(this.setBrightness.bind(accessory));       // SET - bind to the 'setBrightness` method below
+        .onSet(this.setBrightness.bind(this));       // SET - bind to the 'setBrightness` method below
     } else {
       this.logInfo(`remove LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
       removeLightBuld(this);
