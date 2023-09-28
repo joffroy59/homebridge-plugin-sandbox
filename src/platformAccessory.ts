@@ -59,6 +59,9 @@ export class SandboxPlatformAccessory {
     if (!this.disableLightBulb){
       this.logInfo(`create LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
       this.service = createLightBuld(this, accessory.context.device.configDeviceName);
+    } else {
+      this.logInfo(`remove LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
+      removeLightBuld(this);
     }
 
     /**
@@ -94,28 +97,36 @@ export class SandboxPlatformAccessory {
 
     // get the LightBulb service if it exists, otherwise create a new LightBulb service
     // you can create multiple services for each accessory
-    function createLightBuld(accessory: SandboxPlatformAccessory, deviceConfigDeviceName: string) {
-      const service = accessory.accessory.getService(accessory.platform.Service.Lightbulb)
-        || accessory.accessory.addService(accessory.platform.Service.Lightbulb);
+    function createLightBuld(platformAccessory: SandboxPlatformAccessory, deviceConfigDeviceName: string) {
+      const service = platformAccessory.accessory.getService(platformAccessory.platform.Service.Lightbulb)
+        || platformAccessory.accessory.addService(platformAccessory.platform.Service.Lightbulb);
 
       // set the service name, this is what is displayed as the default name on the Home app
       // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
-      service.setCharacteristic(accessory.platform.Characteristic.Name, deviceConfigDeviceName);
+      service.setCharacteristic(platformAccessory.platform.Characteristic.Name, deviceConfigDeviceName);
 
       // each service must implement at-minimum the "required characteristics" for the given service type
       // see https://developers.homebridge.io/#/service/Lightbulb
       // register handlers for the On/Off Characteristic
-      service.getCharacteristic(accessory.platform.Characteristic.On)
-        .onSet(accessory.setOn.bind(accessory)) // SET - bind to the `setOn` method below
-        .onGet(accessory.getOn.bind(accessory)); // GET - bind to the `getOn` method below
+      service.getCharacteristic(platformAccessory.platform.Characteristic.On)
+        .onSet(platformAccessory.setOn.bind(platformAccessory)) // SET - bind to the `setOn` method below
+        .onGet(platformAccessory.getOn.bind(platformAccessory)); // GET - bind to the `getOn` method below
 
 
       // register handlers for the Brightness Characteristic
-      service.getCharacteristic(accessory.platform.Characteristic.Brightness)
-        .onSet(accessory.setBrightness.bind(accessory));       // SET - bind to the 'setBrightness` method below
+      service.getCharacteristic(platformAccessory.platform.Characteristic.Brightness)
+        .onSet(platformAccessory.setBrightness.bind(accessory));       // SET - bind to the 'setBrightness` method below
 
       return service;
     }
+
+    function removeLightBuld(platformAccessory: SandboxPlatformAccessory) {
+      const service = platformAccessory.accessory.getService(platformAccessory.platform.Service.Lightbulb);
+      if (service){
+        platformAccessory.accessory.removeService(service);
+      }
+    }
+
   }
 
   private createSensor(sensorTypoe, sensorName, sensorIdentifier) {
