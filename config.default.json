@@ -13,12 +13,14 @@
                         "lightBulb": {
                             "disableLightBulb": false
                         },
+                        "temperatureSensor": {
+                            "temperatureSensorUpdateInterval": 300,
+                            "temperatureSensorName1": "Sandbox Temperature Sensor One Name",
+                            "temperatureSensorIdentifier1": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                        },
                         "motionSensorUpdateInterval": 300,
-                        "temperatureSensorUpdateInterval": 300,
                         "motionSensorName1": "Sandbox Motion Sensor One Name",
-                        "motionSensorIdentifier1": "Sandbox-Sensor-Motion-YourUniqueIdentifier-1",
-                        "temperatureSensorName1": "Sandbox Temperature Sensor One Name",
-                        "temperatureSensorIdentifier1": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                        "motionSensorIdentifier1": "Sandbox-Sensor-Motion-YourUniqueIdentifier-1"
                     },
                     {
                         "configDeviceName": "Sandbox Room 2",
@@ -27,12 +29,14 @@
                         "lightBulb": {
                             "disableLightBulb": false
                         },
+                        "temperatureSensor": {
+                            "temperatureSensorUpdateInterval": 600,
+                            "temperatureSensorName1": "Sandbox Temperature Sensor One Name",
+                            "temperatureSensorIdentifier1": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                        },
                         "motionSensorUpdateInterval": 600,
-                        "temperatureSensorUpdateInterval": 600,
                         "motionSensorName1": "Sandbox Motion Sensor One Name",
-                        "motionSensorIdentifier1": "Sandbox-Sensor-Motion-YourUniqueIdentifier-1",
-                        "temperatureSensorName1": "Sandbox Temperature Sensor One Name",
-                        "temperatureSensorIdentifier1": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                        "motionSensorIdentifier1": "Sandbox-Sensor-Motion-YourUniqueIdentifier-1"
                     },
                     {
                         "configDeviceName": "Sandbox Room 3",
@@ -41,12 +45,14 @@
                         "lightBulb": {
                             "disableLightBulb": false
                         },
+                        "temperatureSensor": {
+                            "temperatureSensorUpdateInterval": 60,
+                            "temperatureSensorName1": "Sandbox Temperature Sensor One Name",
+                            "temperatureSensorIdentifier1": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                        },
                         "motionSensorUpdateInterval": 60,
-                        "temperatureSensorUpdateInterval": 60,
                         "motionSensorName1": "Sandbox Motion Sensor One Name",
-                        "motionSensorIdentifier1": "Sandbox-Sensor-Motion-YourUniqueIdentifier-1",
-                        "temperatureSensorName1": "Sandbox Temperature Sensor One Name",
-                        "temperatureSensorIdentifier1": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                        "motionSensorIdentifier1": "Sandbox-Sensor-Motion-YourUniqueIdentifier-1"
                     },
                     {
                         "configDeviceName": "Sandbox Room 4",
@@ -55,12 +61,14 @@
                         "lightBulb": {
                             "disableLightBulb": true
                         },
+                        "temperatureSensor": {
+                            "temperatureSensorUpdateInterval": 30,
+                            "temperatureSensorName1": "PS-SR4-Sandbox Temperature Sensor One Name",
+                            "temperatureSensorIdentifier1": "PS-SR4-Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                        },
                         "motionSensorUpdateInterval": 30,
-                        "temperatureSensorUpdateInterval": 30,
                         "motionSensorName1": "PS-SR4-Sandbox Motion Sensor One Name",
-                        "motionSensorIdentifier1": "PS-SR4-Sandbox-Sensor-Motion-YourUniqueIdentifier-1",
-                        "temperatureSensorName1": "PS-SR4-Sandbox Temperature Sensor One Name",
-                        "temperatureSensorIdentifier1": "PS-SR4-Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                        "motionSensorIdentifier1": "PS-SR4-Sandbox-Sensor-Motion-YourUniqueIdentifier-1"
                     }
                 ],
                 "serialNumber": "Default-Serial",

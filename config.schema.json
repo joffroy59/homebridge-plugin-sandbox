@@ -44,7 +44,7 @@
                   "default": "10",
                   "required": false
                 },
-                "lightBulb":{
+                "lightBulb": {
                   "type": "object",
                   "properties": {
                     "disableLightBulb": {
@@ -55,14 +55,31 @@
                     }
                   }
                 },
+                "temperatureSensor": {
+                  "type": "object",
+                  "properties": {
+                    "temperatureSensorUpdateInterval": {
+                      "title": "Interval in which the state of the Temperature Service should be updated (in seconds)",
+                      "type": "number",
+                      "default": "300",
+                      "required": false
+                    },
+                    "temperatureSensorName1": {
+                      "title": "Temperature Sensor Name",
+                      "type": "string",
+                      "required": true,
+                      "default": "Sandbox Temperature Sensor One Name"
+                    },
+                    "temperatureSensorIdentifier1": {
+                      "title": "Temperature Sensor Identifier",
+                      "type": "string",
+                      "required": true,
+                      "default": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
+                    }
+                  }
+                },
                 "motionSensorUpdateInterval": {
                   "title": "Interval in which the state of the Motion Service should be updated (in seconds)",
-                  "type": "number",
-                  "default": "300",
-                  "required": false
-                },
-                "temperatureSensorUpdateInterval": {
-                  "title": "Interval in which the state of the Temperature Service should be updated (in seconds)",
                   "type": "number",
                   "default": "300",
                   "required": false
@@ -78,18 +95,6 @@
                   "type": "string",
                   "required": true,
                   "default": "Sandbox-Sensor-Motion-YourUniqueIdentifier-1"
-                },
-                "temperatureSensorName1": {
-                  "title": "Temperature Sensor Name",
-                  "type": "string",
-                  "required": true,
-                  "default": "Sandbox Temperature Sensor One Name"
-                },
-                "temperatureSensorIdentifier1": {
-                  "title": "Temperature Sensor Identifier",
-                  "type": "string",
-                  "required": true,
-                  "default": "Sandbox-Sensor-Temperature-YourUniqueIdentifier-1"
                 }
               }
             }

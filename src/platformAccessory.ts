@@ -50,7 +50,7 @@ export class SandboxPlatformAccessory {
     this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
     this.logInfo(`motionSensorUpdateInterval=${this.motionSensorUpdateInterval}`);
 
-    this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensorUpdateInterval;
+    this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensor.temperatureSensorUpdateInterval;
     this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
     this.logInfo(`create LightBulb servcie ? (disableLightBulb=${this.disableLightBulb})`);
@@ -79,8 +79,8 @@ export class SandboxPlatformAccessory {
     const motionSensorOneService = this.createSensor(this.platform.Service.MotionSensor, sensorName, sensorIdentifier);
 
     // Add 1 "temperature sensor" services to the accessory
-    sensorName = accessory.context.device.temperatureSensorName1;
-    sensorIdentifier = accessory.context.device.temperatureSensorIdentifier1;
+    sensorName = accessory.context.device.temperatureSensor.temperatureSensorName1;
+    sensorIdentifier = accessory.context.device.temperatureSensor.temperatureSensorIdentifier1;
     this.temperatureService = this.createSensor(this.platform.Service.TemperatureSensor, sensorName, sensorIdentifier);
 
     const sn = this.initAccessoryInformation();
