@@ -55,6 +55,9 @@ export class SandboxPlatformAccessory {
 
     if (!this.disableLightBulb){
       this.createLightBuld();
+    } else {
+      this.logInfo(`remove LightBulb servcie (disableLightBulb=${this.disableLightBulb})`);
+      this.removeLightBuld();
     }
 
     /**
@@ -112,6 +115,15 @@ export class SandboxPlatformAccessory {
       .onSet(this.setBrightness.bind(this));       // SET - bind to the 'setBrightness` method below
   }
 
+
+  /**
+   * Remove existingLightBulb service if it exists
+   */
+  private removeLightBuld() {
+    const service = this.accessory.getService(this.platform.Service.Lightbulb);
+    if (service){
+      this.accessory.removeService(service);
+    }
   }
 
   private createSensor(sensorTypoe, sensorName, sensorIdentifier) {
