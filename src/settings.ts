@@ -27,17 +27,25 @@ export type lightBulb = {
     disableLightBulb?: boolean | false;
 };
 
+export type motionSensor = {
+    motionSensorUpdateInterval?: number | 5;
+    motionSensorName1?: string;
+    motionSensorIdentifier1?: string;
+};
+
+export type temperatureSensor = {
+    temperatureSensorUpdateInterval?: number | 7;
+    temperatureSensorName1?: string;
+    temperatureSensorIdentifier1?: string;
+};
+
 export interface devicesConfig extends device {
     configDeviceName?: string;
     uniqueId?: string;
     updateInterval?: number | 5;
     lightBulb: lightBulb;
-    motionSensorUpdateInterval?: number | 5;
-    temperatureSensorUpdateInterval?: number | 7;
-    motionSensorName1?: string;
-    motionSensorIdentifier1?: string;
-    temperatureSensorName1?: string;
-    temperatureSensorIdentifier1?: string;
+    motionSensor: motionSensor;
+    temperatureSensor: temperatureSensor;
 }
 
 export type device = {

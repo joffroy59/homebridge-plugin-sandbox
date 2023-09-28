@@ -47,10 +47,10 @@ export class SandboxPlatformAccessory {
     this.updateInterval = accessory.context.device.updateInterval;
     this.disableLightBulb = accessory.context.device.lightBulb.disableLightBulb;
     this.configDeviceName = accessory.context.device.configDeviceName;
-    this.motionSensorUpdateInterval = accessory.context.device.motionSensorUpdateInterval;
+    this.motionSensorUpdateInterval = accessory.context.device.motionSensor.motionSensorUpdateInterval;
     this.logInfo(`motionSensorUpdateInterval=${this.motionSensorUpdateInterval}`);
 
-    this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensorUpdateInterval;
+    this.temperatureSensorUpdateInterval = accessory.context.device.temperatureSensor.temperatureSensorUpdateInterval;
     this.logInfo(`temperatureSensorUpdateInterval=${this.temperatureSensorUpdateInterval}`);
 
     this.logInfo(`create LightBulb servcie ? (disableLightBulb=${this.disableLightBulb})`);
@@ -74,13 +74,13 @@ export class SandboxPlatformAccessory {
      */
 
     // Example: add two "motion sensor" services to the accessory
-    let sensorName = accessory.context.device.motionSensorName1;
-    let sensorIdentifier = accessory.context.device.motionSensorIdentifier1;
+    let sensorName = accessory.context.device.motionSensor.motionSensorName1;
+    let sensorIdentifier = accessory.context.device.motionSensor.motionSensorIdentifier1;
     const motionSensorOneService = this.createSensor(this.platform.Service.MotionSensor, sensorName, sensorIdentifier);
 
     // Add 1 "temperature sensor" services to the accessory
-    sensorName = accessory.context.device.temperatureSensorName1;
-    sensorIdentifier = accessory.context.device.temperatureSensorIdentifier1;
+    sensorName = accessory.context.device.temperatureSensor.temperatureSensorName1;
+    sensorIdentifier = accessory.context.device.temperatureSensor.temperatureSensorIdentifier1;
     this.temperatureService = this.createSensor(this.platform.Service.TemperatureSensor, sensorName, sensorIdentifier);
 
     const sn = this.initAccessoryInformation();
