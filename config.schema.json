@@ -2,6 +2,7 @@
   "pluginAlias": "SandboxHomebridgePlugin",
   "pluginType": "platform",
   "singular": true,
+  "headerDisplay": "<p align='center'><img width='100px' src='https://cdn-icons-png.flaticon.com/512/506/506280.png'></p>\n\nThe **Sandbox** plugin allows you to test some plugin mock Devices. \n\nTo get started link lokk at the code.\n\n1. 1 Lihgth Bulb.\n\n2. 1 Motion Sensor.\n\n3. 1 Temperature Sensor.\n",
   "schema": {
     "type": "object",
     "properties": {
