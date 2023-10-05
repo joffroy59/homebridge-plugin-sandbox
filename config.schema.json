@@ -58,17 +58,17 @@
                 "motionSensor": {
                   "type": "object",
                   "properties": {
-                    "motionSensorUpdateInterval": {
-                      "title": "Interval in which the state of the Motion Service should be updated (in seconds)",
-                      "type": "number",
-                      "default": "300",
-                      "required": false
-                    },
                     "motionSensorName1": {
                       "title": "Motion Sensor Name",
                       "type": "string",
                       "required": true,
                       "default": "Sandbox Motion Sensor One Name"
+                    },
+                    "motionSensorUpdateInterval": {
+                      "title": "Interval in which the state of the Motion Service should be updated (in seconds)",
+                      "type": "number",
+                      "default": "300",
+                      "required": false
                     },
                     "motionSensorIdentifier1": {
                       "title": "Motion Sensor Identifier",
@@ -81,17 +81,17 @@
                 "temperatureSensor": {
                   "type": "object",
                   "properties": {
-                    "temperatureSensorUpdateInterval": {
-                      "title": "Interval in which the state of the Temperature Service should be updated (in seconds)",
-                      "type": "number",
-                      "default": "300",
-                      "required": false
-                    },
                     "temperatureSensorName1": {
                       "title": "Temperature Sensor Name",
                       "type": "string",
                       "required": true,
                       "default": "Sandbox Temperature Sensor One Name"
+                    },
+                    "temperatureSensorUpdateInterval": {
+                      "title": "Interval in which the state of the Temperature Service should be updated (in seconds)",
+                      "type": "number",
+                      "default": "300",
+                      "required": false
                     },
                     "temperatureSensorIdentifier1": {
                       "title": "Temperature Sensor Identifier",
